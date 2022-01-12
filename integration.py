@@ -1,6 +1,8 @@
 from flask import Blueprint
+from flask_restplus import Api
 
-int_bd = Blueprint('integration', __name__)
+int_bd = Blueprint('int_api', __name__)
+int_api = Api(int_bd)
 
 @int_bd.route('/hello/')
 def hello():
