@@ -89,5 +89,5 @@ class Pizas:
 
 if __name__ == '__main__':
     pizas = Pizas()
-    query_graph(pizas.g, sub=None, predicate=None, obj=Literal('pos'))
-    query_graph(pizas.g, sub=None, predicate=URIRef('Shape'), obj=Literal('Circle'))
+    pizas.query_graph(pizas.g, sub=None, predicate=None, obj=Literal('pos'))
+    pizas.query_graph(pizas.g, sub=None, predicate=URIRef('Shape'), obj=Literal('Circle'))
