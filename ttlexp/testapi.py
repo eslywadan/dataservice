@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restplus import Api, Resource, fields, reqparse
 import json
-from pizas import *
+from ttlsap.pizas import *
 
 pizza_bd = Blueprint('piza_api', __name__)
 pizza_api = Api(pizza_bd)

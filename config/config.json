@@ -1,0 +1,53 @@
+{
+    "database":{
+        "database_list":[
+            {
+                "name":"Phoenix Production",
+                "type":"phoenix",
+                "connection_string":"jdbc:phoenix:pahdpm01,pahdpm02,pahdpw01:2181:/hbase-unsecure",
+                "driver_path":["jars", "phoenix-4.7.0.2.6.2.0-205-client.jar"]
+            },
+            {
+                "name":"Phoenix LabPlus",
+                "type":"phoenix",
+                "connection_string":"jdbc:phoenix:thadoopmaster1.cminl.oa,thadoopworker1.cminl.oa,thadoopworker2.cminl.oa,thadoopworker3.cminl.oa:2181",
+                "driver_path":["jars", "phoenix-4.7.0.2.6.2.0-205-client.jar"]
+            },
+            {
+                "name":"Greenplum POC",
+                "type":"greenplum",
+                "connection_string":"jdbc:postgresql://10.55.4.67:5432/pocdb",
+                "driver_path":["jars", "postgresql-42.2.5.jar"]
+            },
+            {
+                "name":"SQLite Local",
+                "type":"sqlite",
+                "connection_string":"D:\\program\\tool\\sqlite\\account.sqlite.txt",
+                "driver_path":[]
+            },
+            {
+                "name":"SQLite Common",
+                "type":"sqlite",
+                "connection_string":"D:\\program\\tool\\sqlite\\account.sqlite",
+                "driver_path":[]
+            }
+        ],
+        "default":0,
+        "account_db":3
+    },
+    "log":{
+        "folder_path":["logs"],
+        "level":"DEBUG"
+    },
+    "cache":{
+        "connection":{
+            "host":"localhost",
+            "port":6379
+        },
+        "type":"AUTO",
+        "expiry_hours":-1
+    },
+    "system":{
+        "static_data_path":["static_data"]
+    }
+}

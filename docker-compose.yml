@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  dataapi-cache:
+    image: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - D:\DockerRun\dataapi\redis-data:/data
