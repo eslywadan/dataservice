@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 
 int_bd = Blueprint('int_api', __name__)
 int_api = Api(int_bd)

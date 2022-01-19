@@ -1,5 +1,5 @@
 from flask import request, Response, json, render_template
-from flask_restplus.utils import not_none
+from flask_restx.utils import not_none
 import ttlsap.fab_proc as fab_proc
 import ttlsap.edc_data as edc_data
 import ttlsap.edc_dim as edc_dim

@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restplus import Api, Resource, reqparse
+from flask_restx import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 
 utility = Blueprint('utility_api', __name__)

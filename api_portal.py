@@ -1,8 +1,5 @@
 from flask import Flask
 import werkzeug 
-werkzeug.cached_property = werkzeug.utils.cached_property
-#import flask.scaffold
-#flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from utility import utility as utility_api
 import tools.request_handler as req
 from ttlexp.testapi import pizza_bd as pizza_api

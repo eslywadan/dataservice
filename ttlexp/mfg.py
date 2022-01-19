@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restplus import Api, Resource, fields, reqparse
+from flask_restx import Api, Resource, fields, reqparse
 import json
 from tools.error_handler import JSNError
 import tools.request_handler as req 
