@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_restplus import Api, Resource, fields, reqparse
 import json
 from tools.error_handler import JSNError
@@ -17,6 +17,7 @@ def hello():
 
 @mfg_api.route('/qtime/<string:fab>/<string:prod>')
 @mfg_api.route('/<string:prod>/<string:fab>/qtime')
+@mfg_api.route('/qtime/<fab>/products', methods=['POST'])
 class ProdQtime(Resource):
   qtime_model = mfg_api.model('Qtime', {
     'PRODUCT_ID': fields.String(attribute='PRODUCT_ID'),
@@ -37,9 +38,20 @@ class ProdQtime(Resource):
     data = sa_mfg.productqtime(fab,prod)
     return data
 
-  def post(self, id):
+  @mfg_api.doc()
+  @mfg_api.marshal_with(qtime_model, envelope='qtime')
+  def post(self, fab):
     if not req.check_and_log():
-      return JSNError("Tokenn is missing or token is not correct, please login api to get a new token. ")
-      
-    data = sa_mfg.productqtime(fab,prod)
+      return "Token is missing or token is not correct, please login api to get a new token. ", 401
+    
+    posted = json.loads(request.data.decode("utf-8"))
+    if posted: 
+      if "prod_list" in posted: prod_list = posted["prod_list"] 
+      else: return
+    else: return
+    
+    data = []
+    for prod in prod_list:
+      data.append(sa_mfg.productqtime(fab,prod))
+
     return data
