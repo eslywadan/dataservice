@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restx import Api, Resource, fields, reqparse
 import json
-from ttlsap.pizas import *
+from ttlsap.pizas import Pizas
 
 pizza_bd = Blueprint('piza_api', __name__)
 pizza_api = Api(pizza_bd)
@@ -21,30 +21,33 @@ piza_model = pizza_api.model('Pizas', {
 
 pizas = Pizas()
 
-@pizza_api.route('/pizas/')
-class PizasExp(Resource):
-  @pizza_api.doc()
-  @pizza_api.marshal_with(piza_model, envelope='pizas')
-  def get(self, **kwargs):
-    data = pizas.samples
-    return data
-  
-@pizza_bd.route('/piza/<string:example>')
-def singlepiza(example):
-  data = pizas.query_graph_byid(example)
-  return data
 
-@pizza_api.route('/piza/')
+@pizza_api.route('/pizas/') 
+@pizza_api.route('/piza/<example>/', methods=['POST'])
+class PizasExp(Resource):
+    @pizza_api.doc()
+    @pizza_api.marshal_with(piza_model, envelope='pizas')
+    def get(self):
+        data = pizas.samples
+        return data
+  
+    @pizza_api.doc()
+    @pizza_api.marshal_with(piza_model, envelope='pizas')
+    def post(self, example):
+        print(example)
+        data = pizas.query_graph_byid(example)
+        print(data)
+        return data
+
+@pizza_api.route('/graph/piza/')
 class PizaGraph(Resource):
-  parser = reqparse.RequestParser()
-  parser.add_argument('ex', help='Specify sample')
-  @pizza_api.doc(parser=parser)
-  @pizza_api.marshal_with(piza_model, envelope='piza')
-  def get(self, **kwargs):
-    args = self.parser.parse_args()
-    piza_id = args['ex']
-    data = pizas.query_graph_byid(piza_id)
-    return data
+    @pizza_api.doc()
+    @pizza_api.marshal_with(piza_model, envelope='piza')
+    def get(self, **kwargs):
+        args = self.parser.parse_args()
+        piza_id = args['ex']
+        data = pizas.query_graph_byid(piza_id)
+        return data
   
   
   

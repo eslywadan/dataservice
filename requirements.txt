@@ -7,7 +7,6 @@ jaydebeapi==1.1.1
 redis==3.4.1
 requests
 gunicorn==20.0.4
-# flask-restplus==0.13.0
 flask-restx
 Werkzeug
 rdflib==6.0.1

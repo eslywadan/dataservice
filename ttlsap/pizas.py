@@ -73,7 +73,6 @@ class Pizas:
         self.g.add((subject, URIRef(header[5]), Literal(row[5])))
         self.g.add((subject, URIRef(header[6]), Literal(row[6])))
 
-
     def query_graph(self, sub=None, predicate=None, obj=None):
         for s, p, o in self.g.triples((sub, predicate, obj)):
             print(f'{s}:{p}:{o}')
@@ -89,5 +88,5 @@ class Pizas:
 
 if __name__ == '__main__':
     pizas = Pizas()
-    pizas.query_graph(pizas.g, sub=None, predicate=None, obj=Literal('pos'))
-    pizas.query_graph(pizas.g, sub=None, predicate=URIRef('Shape'), obj=Literal('Circle'))
+    # pizas.query_graph(pizas.g, sub=None, predicate=None, obj=Literal('pos'))
+    # pizas.query_graph(pizas.g, sub=None, predicate=URIRef('Shape'), obj=Literal('Circle'))
