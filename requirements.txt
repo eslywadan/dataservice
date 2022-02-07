@@ -10,4 +10,5 @@ gunicorn==20.0.4
 flask-restx
 Werkzeug
 rdflib==6.0.1
-
+pytest
+nose

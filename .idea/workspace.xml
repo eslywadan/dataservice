@@ -2,21 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd81bcce-2559-41bf-bbbf-4ffcc69d0a86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/api_portal.py" beforeDir="false" afterPath="$PROJECT_DIR$/api_portal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis/piza.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/piza.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis/sa_eng.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/sa_eng.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis/sa_int.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/sa_int.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis/sa_mfg.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/sa_mfg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engineering.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlexp/engineering.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/integration.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlexp/integration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mfg.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlexp/mfg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piza_data.csv.bak" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/appbp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/contact.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/home.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/pyAPI.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testapi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ttlexp/testapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlexp/testapi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ttlsap/piza.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ttlsap/pizas.py" beforeDir="false" afterPath="$PROJECT_DIR$/ttlsap/pizas.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +24,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
