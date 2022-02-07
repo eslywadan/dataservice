@@ -49,5 +49,9 @@
     },
     "system":{
         "static_data_path":["static_data"]
+    },
+    "source_ip":{
+        "int_token_server":["http://INTRPT/web/Verify.svc/API/"],
+        "int_api_server":["http://intrpt/web/LinkPortal.ashx"]
     }
 }
