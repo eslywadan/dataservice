@@ -32,7 +32,7 @@ class ProdQtime(Resource):
     @mfg_api.doc()
     @mfg_api.marshal_with(qtime_model, envelope='qtime')
     def get(self, fab, prod):
-        if not req.check_and_log():
+        if not req.check_and_log(ignore_token=False):
             return JSNError("Tokenn is missing or token is not correct, please login api to get a new token. ")
 
         data = sa_mfg.productqtime(fab,prod)

@@ -3,6 +3,7 @@ from nose.tools import assert_is_none, assert_equal
 from ttlsap.sa_mfg import MfgApi
 from tools.mock_data import *
 
+@patch('ttlsap.sa_mfg.MfgApi.productqtime')
 def test_ttlsap_sa_mfg():
     """ test the source adapter of MFG api server by mocking function """
     mfgapis = MfgApi()
@@ -19,4 +20,3 @@ def test_ttlsap_sa_mfg():
     assert_equal(response, mock_dat)
     
 
-@patch('ttlsap.sa_mfg.MfgApi.productqtime')
