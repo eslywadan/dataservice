@@ -1,8 +1,11 @@
-version: '3.4'
-
+version: '3.9'
 services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
   dataapi-cache:
-    image: redis
+    image: "redis:alpine"
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - D:\DockerRun\dataapi\redis-data:/data
+      - ~DockerRun/dataapi/redis-data:\data

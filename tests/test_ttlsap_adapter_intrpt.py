@@ -1,18 +1,26 @@
 from unittest.mock import Mock, patch
-from nose.tools import assert_is_not_none
+from nose.tools import assert_is_none, assert_equal
 from ttlsap.adapter.intrpt import IntRptConnect
 
 
-@patch('ttlsap.adapter.intrpt.requests.get')
-def test_ttlsap_adapter_intrpt(mock_get):
+def test_ttlsap_adapter_intrpt():
     """test the intrpt under ../ttlsap/adapter by mocking the intrpt api token server """
-    mock_get.return_value.ok = True
-    
-    print("test the get api key from intrpt toekn server")
-    
     intrpt = IntRptConnect()
     assert intrpt._identity == {'int_token_server': ['eynenfgndsdfdfdfdwedfdwed']} 
-    assert intrpt._intrpt == {'int_api_server': ['http://intrpt/web/LinkPortal.ashx'], 'int_token_server': ['http://INTRPT/web/Verify.svc/API/']}
-    intrpt.get_api_key()
-    assert_is_not_none(intrpt.apikey)
+    assert intrpt._inttoken == 'http://INTRPT/web/Verify.svc/API/'
+    assert intrpt._intapi == 'http://intrpt/web/LinkPortal.ashx'
+
+    mock_api_key = [{'apikey':"erutn545"}]
+    with patch('ttlsap.adapter.intrpt.requests.get') as mock_get:
+            mock_get.return_value.ok = True
+            mock_get.return_value.json.return_value = mock_api_key
+            res = intrpt.get_apikey()
+            print(res)
+    assert res.json()[0] ==  mock_api_key[0]
+    
+    with patch('ttlsap.adapter.intrpt.requests.get') as mock_get:
+            mock_get.return_value.ok = False
+            mock_get.return_value.json.return_value = None
+            res = intrpt.get_apikey()
+    assert_is_none(res.json())
     

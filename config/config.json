@@ -52,6 +52,7 @@
     },
     "source_ip":{
         "int_token_server":["http://INTRPT/web/Verify.svc/API/"],
-        "int_api_server":["http://intrpt/web/LinkPortal.ashx"]
+        "int_api_server":["http://intrpt/web/LinkPortal.ashx"],
+        "mfg_api_server":["http://TNVTMFGRPT01/MFGWebAPI"]
     }
 }

@@ -1,10 +1,10 @@
 import requests
-import pandas as pd
 import json
+from tools.config_loader import ConfigLoader
 
 
 class MfgApi():
-    apiserver = 'http://TNVTMFGRPT01/MFGWebAPI'
+    apiserver = ConfigLoader.config("source_ip")["mfg_api_server"][0]
 
     def __init__(self):
         pass
