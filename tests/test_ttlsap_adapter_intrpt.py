@@ -1,7 +1,8 @@
 from unittest.mock import Mock, patch
 from nose.tools import assert_is_none, assert_equal
+import os
+import sys
 from ttlsap.adapter.intrpt import IntRptConnect
-
 
 def test_ttlsap_adapter_intrpt():
     """test the intrpt under ../ttlsap/adapter by mocking the intrpt api token server """
@@ -23,4 +24,9 @@ def test_ttlsap_adapter_intrpt():
             mock_get.return_value.json.return_value = None
             res = intrpt.get_apikey()
     assert_is_none(res.json())
-    
+
+
+if __name__ == '__main__':
+        print(sys.path)
+        print(os.environ['PYTHON_PATH'])
+        test_ttlsap_adapter_intrpt()

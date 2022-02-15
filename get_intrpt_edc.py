@@ -1,6 +1,9 @@
-from ttlsap.adapter.initrpt import IntRptConnect
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+from ttlsap.adapter.intrpt import IntRptConnect
 
 res = IntRptConnect()
-res.get_api_key()
-api_key = res.apikey
+res.get_apikey()
+print(res.apikey.__str__)
 
