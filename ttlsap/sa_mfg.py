@@ -9,18 +9,15 @@ class MfgApi():
     def __init__(self):
         pass
 
-    @staticmethod
-    def web_api(url):
-        response = requests.get(url)
-        json_list = response.json()
-        return json_list
+    def web_api(self, url):
+        self.response = requests.get(url)
+        return self.response.json()
 
     @classmethod
     def url_getproductqtime(cls, FAB_ID, PROD_ID):
-        url = '%s/api/Home/GetProductQTime?fac=%s&prod=%s' % (cls.apiserver, FAB_ID, PROD_ID)
+        url = '%s/api/Home/GetProductQtime?fac=%s&prod=%s' % (cls.apiserver, FAB_ID, PROD_ID)
         return url
 
     def productqtime(self, FAB_ID, PROD_ID):
         url = self.url_getproductqtime(FAB_ID, PROD_ID)
-        data = self.web_api(url)
-        return data
+        return self.web_api(url)

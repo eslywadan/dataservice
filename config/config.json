@@ -54,5 +54,14 @@
         "int_token_server":["http://INTRPT/web/Verify.svc/API/"],
         "int_api_server":["http://intrpt/web/LinkPortal.ashx"],
         "mfg_api_server":["http://TNVTMFGRPT01/MFGWebAPI"]
+    },
+    "int_source_api":{
+        "EDC_RAW":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"]
+    },
+    "source_api_config":{
+        "req_max_retry": "4"
+    },
+    "test_env":{
+        "mock_level":"0"
     }
-}
+}   
