@@ -161,7 +161,7 @@ def check_and_log(ignore_token=False):
     Logger.log(f'Deny request: {request.method} {request.url}')
     return False
 
-#endregion
+
 
 #region 讀寫cache
 def find_cache():
