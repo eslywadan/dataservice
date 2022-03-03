@@ -61,9 +61,10 @@ def test_ttlsap_adapter_intrpt():
 	data_path = '%s/data/eng_test_data' % (curdir)
 	eng_test_data = Path(data_path)
 	edc_raw_data_path = eng_test_data / "source_api_edc_raw.json"
+	assert len(intrpt.resp.json()) > 0
 	if edc_raw_data_path.exists():
 		last_file = json.load(edc_raw_data_path.open())
-		assert_equal(last_file, intrpt.resp.json())
+		assert len(last_file) == len(intrpt.resp.json())
 
 	eng_test_data.mkdir(exist_ok=True)
 	edc_raw_data_path.write_text(json.dumps(intrpt.resp.json()))

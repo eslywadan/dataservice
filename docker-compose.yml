@@ -1,11 +1,20 @@
 version: '3.9'
+
 services:
-  web:
-    build: .
-    ports:
-      - "8080:8080"
-  dataapi-cache:
+  dataservice-cache:
     image: "redis:alpine"
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - ~DockerRun/dataapi/redis-data:\data
+      - D:\DockerRun\dataservice\redis-data:/data
+  dataservice-secure:
+    image: dataservice:latest
+    volumes:
+      - D:\DockerRun\dataservice\secure-logs:/app/logs
+      - D:\DockerRun\dataservice\secure-config:/app/config
+      - D:\DockerRun\common:/app/common
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dataapi-cache

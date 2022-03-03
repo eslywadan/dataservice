@@ -28,7 +28,7 @@
             {
                 "name":"SQLite Common",
                 "type":"sqlite",
-                "connection_string":"D:\\program\\tool\\sqlite\\account.sqlite",
+                "connection_string":"common/account.sqlite",
                 "driver_path":[]
             }
         ],
