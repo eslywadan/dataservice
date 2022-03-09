@@ -11,7 +11,7 @@ class IntRptConnect():
     _identity = SecretLoader.secret("source_secret")
 
     def __init__(self):
-        pass
+        self.get_apikey()
 
     def get_apikey(self):
         url = '%s%s' % (self._inttoken, self._identity["int_token_server"][0])
@@ -65,9 +65,10 @@ class IntRptConnect():
         linkpage = self.linkpageencode.decode('utf-8')
         linkin = self.filterencode.decode('utf-8')
         linkkey = self.apikey.content.decode('utf-8')
+        self.linkkey = linkkey
 
-        url = "%s?linkpage=%s&linklevel=0&linkin=%s&linkkey=%s" %(apiserver,linkpage,linkin,linkkey)
-        response = requests.get(url)
+        self.url = "%s?linkpage=%s&linklevel=0&linkin=%s&linkkey=%s" %(apiserver,linkpage,linkin,linkkey)
+        response = requests.get(self.url)
         if response.status_code == 200:
             if (response.json()['status'] == 'error') and (response.json()['message'] == '@{expired}'):
                 self.reqret_code = '401'

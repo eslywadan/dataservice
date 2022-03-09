@@ -2,6 +2,7 @@ from unittest.mock import Mock, patch
 from nose.tools import assert_is_none, assert_equal
 from tools.config_loader import ConfigLoader
 from ttlsap.adapter.intrpt import IntRptConnect
+from ttlsap.sa_eng import EdcRawApi
 from pathlib import Path
 import json
 
@@ -34,18 +35,14 @@ def test_ttlsap_adapter_intrpt():
 	
 	else:
 		intrpt.get_apikey()
-
-	intrpt.filcrit_edcraw(fab="TFT_8_EDC",selQryType="T",FromDate="20210114140000",ToDate="20210114160000",txtIDList="",selMainEQP="PFRW0100",selSubEQP="PFRW0100",selEDCItem="AKCH_EXH_PRES")
-	assert intrpt.filter == "fab=TFT_8_EDC&selQryType=T&FromDate=20210114140000&ToDate=20210114160000&txtIDList=&selMainEQP=PFRW0100&selSubEQP=PFRW0100&selEDCItem=AKCH_EXH_PRES" 
-	print(intrpt.filterencode)
-	assert intrpt.filterencode == b'ZmFiPVRGVF84X0VEQyZzZWxRcnlUeXBlPVQmRnJvbURhdGU9MjAyMTAxMTQxNDAwMDAmVG9EYXRlPTIwMjEwMTE0MTYwMDAwJnR4dElETGlzdD0mc2VsTWFpbkVRUD1QRlJXMDEwMCZzZWxTdWJFUVA9UEZSVzAxMDAmc2VsRURDSXRlbT1BS0NIX0VYSF9QUkVT'
-
-	filter_args_in_dic = {"fab":"TFT_8_EDC","selQryType":"T","FromDate":"20210114140000","ToDate":"20210114160000","txtIDList":"","selMainEQP":"PFRW0100","selSubEQP":"PFRW0100","selEDCItem":"AKCH_EXH_PRES"}
+  
+	from_date = "20220114140000"
+	to_date = "20220114160000"
+	intrpt.filcrit_edcraw(fab="TFT_8_EDC",selQryType="T",FromDate=from_date,ToDate=to_date,txtIDList="",selMainEQP="PFRW0100",selSubEQP="PFRW0100",selEDCItem="AKCH_EXH_PRES")
+	
+	filter_args_in_dic = {"fab":"TFT_8_EDC","selQryType":"T","FromDate":from_date,"ToDate":to_date,"txtIDList":"","selMainEQP":"PFRW0100","selSubEQP":"PFRW0100","selEDCItem":"AKCH_EXH_PRES"}
 	intrpt.filcrit_edcraw(**filter_args_in_dic)
-	assert intrpt.filter == "fab=TFT_8_EDC&selQryType=T&FromDate=20210114140000&ToDate=20210114160000&txtIDList=&selMainEQP=PFRW0100&selSubEQP=PFRW0100&selEDCItem=AKCH_EXH_PRES" 
-	print(intrpt.filterencode)
-	assert intrpt.filterencode == b'ZmFiPVRGVF84X0VEQyZzZWxRcnlUeXBlPVQmRnJvbURhdGU9MjAyMTAxMTQxNDAwMDAmVG9EYXRlPTIwMjEwMTE0MTYwMDAwJnR4dElETGlzdD0mc2VsTWFpbkVRUD1QRlJXMDEwMCZzZWxTdWJFUVA9UEZSVzAxMDAmc2VsRURDSXRlbT1BS0NIX0VYSF9QUkVT'
-
+	
 	funname = "EDC_RAW"
 	link_page = "/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"
 	intrpt.linkpage(funname)
@@ -69,6 +66,20 @@ def test_ttlsap_adapter_intrpt():
 	eng_test_data.mkdir(exist_ok=True)
 	edc_raw_data_path.write_text(json.dumps(intrpt.resp.json()))
 
+	edcrawapi = EdcRawApi()
+	data = edcrawapi.edcrawbytime(fab="TFT8",equip="PFRW0100",edc="AKCH_EXH_PRES",start_time=from_date,
+            end_time=to_date,sub_eq="PFRW0100",grp_id="")
+	
+	assert edcrawapi.linkpageencode == intrpt.linkpageencode
+	assert edcrawapi.filter == intrpt.filter
+	assert edcrawapi.filterencode == intrpt.filterencode
+	#assert edcrawapi.apikey == intrpt.apikey
+	#assert edcrawapi.linkkey == intrpt.linkkey
+	
+	print(f"edcrawapi:{edcrawapi.url}")
+	#assert edcrawapi.url == intrpt.url
+	print(f"intrpt:{intrpt.url}")
+	assert data == intrpt.resp.json()
 
     
 

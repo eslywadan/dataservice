@@ -12,19 +12,11 @@ def test_get_token(test_client):
   api_token = response.json
   assert api_token == account_token
 
-def test_product_qtime(test_client):
-  url = '/ds/mfg/qtime/TFT5/TG5515BF7'
+def test_products_qtime_get(test_client):
+  prefix_url = '/ds/mfg/qtime/TFT5/products'
   headers = {'Content-Type': 'application/json', 'token': account_token}
+  prod_list = '/TGL320XKHAP,TG5515BF7A,TGL314BH,TGE505XFHSF'
+  url = '%s%s'%(prefix_url, prod_list)
   r = test_client.get(url, headers=headers)
   assert r.status == '200 OK'
-
-def test_products_qtime(test_client):
-  url = '/ds/mfg/qtime/TFT5/products'
-  headers = {'Content-Type': 'application/json', 'token': account_token}
-  prod_list = ['TGL320XKHAP','TG5515BF7A','TGL314BH','TGE505XFHSF']
-  payload = {"prod_list": prod_list}
-  data = json.dumps(payload)
-  r = test_client.post(url, headers=headers, data=data)
-  assert r.status == '200 OK'
-
 
