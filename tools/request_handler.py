@@ -145,18 +145,22 @@ def check_and_log(ignore_token=False):
         Logger.log(f'Issue request: {request.method} {request.url}')
         return True
 
-    if "token" in request.headers: 
-        token = request.headers["token"]
-        redis = RedisDb.default()
-        client_info = redis.get(token)
-        if client_info is not None:
-            client_id = client_info[0:client_info.index(":")]
-            permission = client_info[client_info.index(":")+1:]
-            if permission:
-                permission_list = permission.split("|")
-                if "QUERY" in permission_list:
-                    Logger.log(f'Issue request: @{client_id} {request.method} {request.url}')
-                    return True
+    if "X-Fields" in request.headers: 
+        token = request.headers["X-Fields"]
+
+    if request.args.get('token'):
+        token = request.args.get('token')
+        
+    redis = RedisDb.default()
+    client_info = redis.get(token)
+    if client_info is not None:
+        client_id = client_info[0:client_info.index(":")]
+        permission = client_info[client_info.index(":")+1:]
+        if permission:
+            permission_list = permission.split("|")
+            if "QUERY" in permission_list:
+                Logger.log(f'Issue request: @{client_id} {request.method} {request.url}')
+                return True
 
     Logger.log(f'Deny request: {request.method} {request.url}')
     return False

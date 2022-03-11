@@ -21,7 +21,7 @@ def test_edc_data(test_client):
   assert r.status == '200 OK'
 
 def test_edc_data_muti_items(test_client):
-  named_data = '/ds/eng/edcraw/TFT8/PFRW0100/items/AKCH_EXH_PRES'
+  named_data = '/ds/eng/edcraw/TFT8/PFRW0100/items/AKCH_EXH_PRES,AKCH_EXH_PRES'
   qstr = '?subEQP=PFRW0100&FromDate=20210114140000,ToDate=20210114160000'
   url = '%s%s'%(named_data, qstr)
   headers = {'Content-Type': 'application/json', 'token': account_token}

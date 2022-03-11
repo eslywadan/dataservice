@@ -23,14 +23,14 @@ def hello():
 #    'CHAMBER': fields.String(attribute='CHAMBER'),
 #    'OPER': fields.String(attribute='OPER'),
 #    'RECIPE_ID': fields.String(attribute='RECIPE_ID'),
-#    'OWNER': fields.String(attribute='OWNER'),
+#    'OWNER': fields.String(attribute='OWNER')
 #    'ITEM': fields.String(attribute='ITEM'),
-#    'Value': fields.String(attribute='VALUE'),
+#    'Value': fields.String(attribute='VALUE')
 #})
 
 edc_parser = eng_api.parser()
-edc_parser.add_argument('start_time', type=str,  help='Required start time by date,ex:20220303140000')
-edc_parser.add_argument('end_time', type=str, help='Required start time by date,ex:20220303160000')
+edc_parser.add_argument('start_time', type=str,  help='Required start time by date,ex:20220114140000')
+edc_parser.add_argument('end_time', type=str, help='Required start time by date,ex:20220114160000')
 edc_parser.add_argument('sub_equip', type=str, help='Optional if sub_equip is diff with equip,ex:PFRW0100')
 # edc_parser.add_argument('grp_id', type=str, help='Optional, data provided only for specified glass id')
 edc_parser.add_argument('token', type=str, help='Optional token')
@@ -39,8 +39,10 @@ class EdcRaw(Resource):
 
     @eng_api.doc('EDC Raw NDE')
     @eng_api.expect(edc_parser)
-    #@eng_api.marshal_with(edcraw_model)
+    # @eng_api.marshal_with(edcraw_model)
     def get(sellf, fab, equip, item_list):
+        if not req.check_and_log(ignore_token=False):
+            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
         start_time = request.args.get('start_time')
         end_time = request.args.get('end_time')
         sub_equip = request.args.get('sub_equip')
