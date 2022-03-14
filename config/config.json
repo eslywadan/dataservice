@@ -22,7 +22,7 @@
             {
                 "name":"SQLite Local",
                 "type":"sqlite",
-                "connection_string":"D:\\program\\tool\\sqlite\\account.sqlite.txt",
+                "connection_string":"D:\\program\\tool\\sqlite\\account.sqlite",
                 "driver_path":[]
             },
             {

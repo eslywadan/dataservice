@@ -7,7 +7,8 @@ def get_account_token(client_id):
     #return str(uuid.uuid1(clock_seq = clock_seq))
 
     dt = datetime.today().strftime("%Y-%m-%d")
-    return str(uuid.uuid3(uuid.NAMESPACE_DNS, client_id + "_" + dt))
+    clock_seq = datetime.today().strftime("%H%M%S%f")
+    return str(uuid.uuid3(uuid.NAMESPACE_DNS, client_id + "_" + dt + "_" + clock_seq))
 
 def crypto_password(type, password):
     if type == 0:

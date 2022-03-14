@@ -124,11 +124,19 @@ def process_req_ui():
         return render_template('default.html', message='Config refreshed!',  action_url='/home', action_name='Main Menu')
 
 
-def process_login():
+def process_login(**kwargs):
     check_and_log(ignore_token=True)
     
-    client_id = request.headers["clientId"] if "clientId" in request.headers else ""
-    password = request.headers["password"] if "password" in request.headers else ""
+    if "clientId" in request.headers:
+        client_id = request.headers["clientId"]  
+    else:
+        client_id = kwargs['clientId']
+
+    if "password" in request.headers:
+        password = request.headers["password"]
+    else:
+        password = kwargs['password']
+
     token = account.check_client_id_password(client_id, password)
 
     if token is not None:
@@ -150,7 +158,7 @@ def check_and_log(ignore_token=False):
 
     if request.args.get('token'):
         token = request.args.get('token')
-        
+
     redis = RedisDb.default()
     client_info = redis.get(token)
     if client_info is not None:
