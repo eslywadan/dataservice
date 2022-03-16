@@ -1,7 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, send_file
 from flask_restx import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 import tools.request_handler as req
+from pathlib import Path
 
 utility = Blueprint('utility_api', __name__)
 utility_api = Api(utility)
@@ -31,3 +32,17 @@ class UploadDemo(Resource):
         file = args.get('file')
         print(file.filename)
         return "Upload file is " + file.filename
+
+
+@utility_api.route('/client/<string:client_type>', methods=['GET'])
+class ClientDownload(Resource):
+    
+    def get(self,client_type):
+        if client_type == "python":
+            try:
+                return Path.absolute(self)
+                #return send_file('doc\client\python-client.py',attachment_filename='python-client.py') 
+            except Exception as e:
+                return str(e)
+
+        return "Has not the client type"

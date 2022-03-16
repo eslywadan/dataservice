@@ -34,13 +34,13 @@ edc_parser.add_argument('end_time', type=str, help='Required start time by date,
 edc_parser.add_argument('sub_equip', type=str, help='Optional if sub_equip is diff with equip,ex:PFRW0100')
 # edc_parser.add_argument('grp_id', type=str, help='Optional, data provided only for specified glass id')
 edc_parser.add_argument('token', type=str, help='Optional token')
-@eng_api.route('/edcraw/<string:fab>/<string:equip>/items/<string:item_list>', methods=['GET'])
+@eng_api.route('/edcraw/<string:fab>/<string:equip>/items/<string:items>', methods=['GET'])
 class EdcRaw(Resource):
 
     @eng_api.doc('EDC Raw NDE')
     @eng_api.expect(edc_parser)
     # @eng_api.marshal_with(edcraw_model)
-    def get(sellf, fab, equip, item_list):
+    def get(sellf, fab, equip, items):
         if not req.check_and_log(ignore_token=False):
             return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
         start_time = request.args.get('start_time')
@@ -50,7 +50,7 @@ class EdcRaw(Resource):
         print(start_time,end_time)
 
         data = []
-        for item in item_list.split(","):
+        for item in items.split(","):
             data.append(edcrawapi.edcrawbytime(fab=fab,equip=equip,edc=item,start_time=start_time,
             end_time=end_time,sub_eq=sub_equip,grp_id=''))
             print(data)

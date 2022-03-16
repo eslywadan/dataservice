@@ -153,14 +153,15 @@ def check_and_log(ignore_token=False):
         Logger.log(f'Issue request: {request.method} {request.url}')
         return True
 
-    if "X-Fields" in request.headers: 
-        token = request.headers["X-Fields"]
+    if "apikey" in request.headers: 
+        token = request.headers["apikey"]
 
     if request.args.get('token'):
         token = request.args.get('token')
 
-    redis = RedisDb.default()
-    client_info = redis.get(token)
+    if token is not None:
+        redis = RedisDb.default()
+        client_info = redis.get(token)
     if client_info is not None:
         client_id = client_info[0:client_info.index(":")]
         permission = client_info[client_info.index(":")+1:]
