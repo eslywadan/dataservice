@@ -7,11 +7,9 @@ services:
     volumes:
       - D:\DockerRun\dataservice\redis-data:/data
   dataservice-secure:
-    image: dataservice:latest
+    image: dataservice:v1singleextpath
     volumes:
-      - D:\DockerRun\dataservice\secure-logs:/app/logs
-      - D:\DockerRun\dataservice\secure-config:/app/config
-      - D:\DockerRun\common:/app/common
+      - D:\DockerRun\dataservice:/app/ext
     ports:
       - "8080:8080"
     stdin_open: true

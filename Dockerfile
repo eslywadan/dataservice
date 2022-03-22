@@ -12,7 +12,9 @@ EXPOSE 8080
 WORKDIR /app
 COPY . .
 
+
 # During debugging, this entry point will be overridden. For more information, refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "api_portal:app", \
-    "--log-file", "/app/logs/gunicorn.log", \
-    "--timeout", "900"]
+CMD
+# CMD ["gunicorn", "--bind", "0.0.0.0:8080", "api_portal:app", \
+#    "--log-file", "/app/ext/gunicorn.log", \
+#    "--timeout", "900"]

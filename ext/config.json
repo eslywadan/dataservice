@@ -41,7 +41,7 @@
     },
     "cache":{
         "connection":{
-            "host":"localhost",
+            "host":"dataservice-cache",
             "port":6379
         },
         "type":"AUTO",
