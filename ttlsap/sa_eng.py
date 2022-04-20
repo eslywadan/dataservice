@@ -5,7 +5,7 @@ from ttlsap.adapter.intrpt import IntRptConnect
 
 
 class EdcRawApi():
-    
+
     def __init__(self):
       pass
 
@@ -13,14 +13,14 @@ class EdcRawApi():
       selQryType = "T"
       intrpt = IntRptConnect()
       intrpt.get_apikey()
-      if  kwargs['fab'] == "TFT8":
-          kwargs['fab'] = "TFT_8_EDC"
+      edcmap = ConfigLoader.config("edcfabmap")
+      fab = edcmap[kwargs['fab']]
 
-      intrpt.filcrit_edcraw(fab=kwargs['fab'],selQryType=selQryType,FromDate=kwargs['start_time'],
+      intrpt.filcrit_edcraw(fab=fab,selQryType=selQryType,FromDate=kwargs['start_time'],
         ToDate=kwargs['end_time'],txtIDList=kwargs['grp_id'],selMainEQP=kwargs['equip'],
         selSubEQP=kwargs['sub_eq'],selEDCItem=kwargs['edc'])
 
-      funname = 'EDC_RAW'
+      funname = 'EDC_RAW_'+ fab.split("_")[0]
       intrpt.linkpage(funname)
       data = intrpt.request_api()
       cls.url = intrpt.url

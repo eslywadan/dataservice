@@ -80,6 +80,4 @@ def test_ttlsap_adapter_intrpt():
 	#assert edcrawapi.url == intrpt.url
 	print(f"intrpt:{intrpt.url}")
 	assert data == intrpt.resp.json()
-
-    
-
+	

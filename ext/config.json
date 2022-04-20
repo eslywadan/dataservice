@@ -56,12 +56,17 @@
         "mfg_api_server":["http://TNVTMFGRPT01/MFGWebAPI"]
     },
     "int_source_api":{
-        "EDC_RAW":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"]
+        "EDC_RAW_TFT":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"],
+        "EDC_RAW_CF":["/WEB/WAPI/EDC/EDC_CF_EDCQuery2_API.ashx"],
+        "EDC_RAW_LCD":["/WEB/WAPI/EDC/EDC_LCD_EDCQuery2_API.ashx"]
     },
     "source_api_config":{
         "req_max_retry": "4"
     },
     "test_env":{
         "mock_level":"0"
+    },
+    "edcfabmap":{
+        "TFT1":"TFT_1_EDC", "TFT2":"TFT_2_EDC", "TFT3":"TFT_3_EDC", "TFT4":"TFT_4_EDC", "TFT5":"TFT_5_EDC", "TFT6":"TFT_6_EDC", "TFT7":"TFT_7_EDC", "TFT8":"TFT_8_EDC", "CF1":"CF_1_EDC", "CF2":"CF_2_EDC", "CF3":"CF_3_EDC", "CF4":"CF_4_EDC", "CF5":"CF_5_EDC", "CF6":"CF_6_EDC", "CF7":"CF7_EDC", "CF8":"CF_8_EDC", "LCD1":"LCD_1_EDC", "LCD2":"LCD_2_EDC", "LCD3":"LCD_3_EDC", "LCD4":"LCD_4_EDC", "LCD5":"LCD_5_EDC", "LCD6":"LCD_6_EDC", "LCD7":"LCD_7_EDC", "LCD8":"LCD_8_EDC"
     }
 }   
