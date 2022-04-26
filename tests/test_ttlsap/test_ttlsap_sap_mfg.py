@@ -29,7 +29,15 @@ def test_ttlsap_sa_mfg():
     test_fab = "TFT5"
     test_product = "TGE505XFHSF"
     source_url = "http://TNVTMFGRPT01/MFGWebAPI/api/Home/GetProductQtime?fac=TFT5&prod=TGE505XFHSF"
-    test_url = mfgapis.url_getproductqtime(test_fab,test_product)
+    test_url = mfgapis.url_getproductapi(test_fab,test_product,"prod_qtime")
+    assert_equal(source_url, test_url)
+
+    source_url = "http://TNVTMFGRPT01/MFGWebAPI/api/Home/GetProductRecipe?fac=TFT5&prod=TGE505XFHSF"
+    test_url = mfgapis.url_getproductapi(test_fab,test_product, "prod_recipe")
+    assert_equal(source_url, test_url)
+
+    source_url = "http://TNVTMFGRPT01/MFGWebAPI/api/Home/GetProductRoute?fac=TFT5&prod=TGE505XFHSF"
+    test_url = mfgapis.url_getproductapi(test_fab,test_product,"prod_route")
     assert_equal(source_url, test_url)
     print(test_url)
 

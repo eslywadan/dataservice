@@ -27,9 +27,8 @@ def hello():
 
 mfg_parser = mfg_api.parser()
 mfg_parser.add_argument('token', type=str, help='Optional token')
-@mfg_api.route('/qtime/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='qtime')
+@mfg_api.route('/qtime/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdqtime')
 class ProdQtime(Resource):
-
 
     @mfg_api.doc('qtime NDE')
     @mfg_api.expect(mfg_parser)
@@ -47,6 +46,52 @@ class ProdQtime(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productqtime(fab,prod))
 
-        print(data) 
+        # print(data) 
+        return data
+
+
+@mfg_api.route('/recipe/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdrecipe')
+class PrdRecipe(Resource):
+
+    @mfg_api.doc('Products Recipe NDE')
+    @mfg_api.expect(mfg_parser)
+    # @mfg_api.marshal_with(recipe_model, mask='token')
+    def get(self, fab, prod=None, list_prods=None):
+        if not req.check_and_log(ignore_token=False):
+            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+
+        if list_prods is not None:
+            prod_list = list_prods.split(",")
+        if prod is not None:
+            prod_list = prod
+
+        data = []
+        for prod in prod_list:
+            data.append(sa_mfg.productrecipe(fab,prod))
+
+        # print(data) 
+        return data
+
+    
+@mfg_api.route('/route/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdroute')
+class PrdRoute(Resource):
+
+    @mfg_api.doc('Products Route NDE')
+    @mfg_api.expect(mfg_parser)
+    # @mfg_api.marshal_with(recipe_model, mask='token')
+    def get(self, fab, prod=None, list_prods=None):
+        if not req.check_and_log(ignore_token=False):
+            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+
+        if list_prods is not None:
+            prod_list = list_prods.split(",")
+        if prod is not None:
+            prod_list = prod
+
+        data = []
+        for prod in prod_list:
+            data.append(sa_mfg.productroute(fab,prod))
+
+        # print(data) 
         return data
 

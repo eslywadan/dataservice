@@ -1,4 +1,3 @@
-from itsdangerous import base64_encode
 from tools.config_loader import ConfigLoader
 from tools.sec_loader import SecretLoader
 import requests
@@ -7,7 +6,7 @@ import base64
 
 class IntRptConnect():
     _inttoken = ConfigLoader.config("source_ip")["int_token_server"][0]
-    _intapi = ConfigLoader.config("source_ip")["int_api_server"][0]
+    _intapiservers = ConfigLoader.config("source_ip")["int_api_server"]
     _identity = SecretLoader.secret("source_secret")
 
     def __init__(self):
@@ -25,11 +24,19 @@ class IntRptConnect():
         The key word args ex: "fab='TFT_8_EDC',selQryType='T', FromDate='20210114140000', ToDate='20210114160000',
         , txtIDList='', selMainEQP='PFRW0100', selSubEQP='PFRW0100', selEDCItem='AKCH_EXH_PRES' "
         """
-        fstr = "fab=%s&selQryType=%s&FromDate=%s&ToDate=%s&txtIDList=%s&selMainEQP=%s&selSubEQP=%s&selEDCItem=%s" %(kwargs['fab'], kwargs['selQryType'], kwargs['FromDate'], kwargs['ToDate'], kwargs['txtIDList'], kwargs['selMainEQP'], kwargs['selSubEQP'], kwargs['selEDCItem'])
+        fab = kwargs['fab']
+        self._whichapiserver(fab)
+
+        fstr = "fab=%s&selQryType=%s&FromDate=%s&ToDate=%s&txtIDList=%s&selMainEQP=%s&selSubEQP=%s&selEDCItem=%s" %(fab, kwargs['selQryType'], kwargs['FromDate'], kwargs['ToDate'], kwargs['txtIDList'], kwargs['selMainEQP'], kwargs['selSubEQP'], kwargs['selEDCItem'])
         fstr_base64en = base64.b64encode(fstr.encode('ascii'))
         
         self.filter = fstr
         self.filterencode = fstr_base64en
+
+    def _whichapiserver(self,fab):
+        self._intapi = self._intapiservers[0]
+        if fab.split("_")[1] == "L":
+            self._intapi = self._intapiservers[1]
 
     def linkpage(self,funname):
         """ the fun accept the funname such as "EDC_RAW" and find the link page (read the int source api defined in config)
@@ -78,9 +85,4 @@ class IntRptConnect():
             self.reqret_code = '500'
 
         self.resp = response
-
-
-
-
-
     

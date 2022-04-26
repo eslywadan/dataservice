@@ -53,7 +53,7 @@ class EdcRaw(Resource):
         for item in items.split(","):
             data.append(edcrawapi.edcrawbytime(fab=fab,equip=equip,edc=item,start_time=start_time,
             end_time=end_time,sub_eq=sub_equip,grp_id=''))
-            print(data)
+            # print(data)
 
         return data
 

@@ -14,7 +14,6 @@ def test_ttlsap_adapter_intrpt():
 	 """
 	intrpt = IntRptConnect()
 	assert intrpt._inttoken == 'http://INTRPT/web/Verify.svc/API/'
-	assert intrpt._intapi == 'http://intrpt/web/LinkPortal.ashx'
 
 	if mock_level == 1:
 		print("Tests using the mock function")
@@ -43,11 +42,14 @@ def test_ttlsap_adapter_intrpt():
 	filter_args_in_dic = {"fab":"TFT_8_EDC","selQryType":"T","FromDate":from_date,"ToDate":to_date,"txtIDList":"","selMainEQP":"PFRW0100","selSubEQP":"PFRW0100","selEDCItem":"AKCH_EXH_PRES"}
 	intrpt.filcrit_edcraw(**filter_args_in_dic)
 	
-	funname = "EDC_RAW"
-	link_page = "/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"
+	funname = "EDC_RAW_TFT"
+	link_page = "/WEB/WAPI/EDC/EDC_TFT_EDCQuery_API.ashx"
 	intrpt.linkpage(funname)
+	
+	assert intrpt._intapi == 'http://intrpt/web/LinkPortal.ashx'
 	assert intrpt.linkpage == link_page
-	assert intrpt.linkpageencode == b"L1dFQi9XQVBJL0VEQy9FRENfVEZUX0VEQ1F1ZXJ5Ml9BUEkuYXNoeA=="
+	assert intrpt.linkpageencode == b"L1dFQi9XQVBJL0VEQy9FRENfVEZUX0VEQ1F1ZXJ5X0FQSS5hc2h4"
+	
 	
 	qry_res = intrpt.request_api()
 	print(intrpt.resp.url)
