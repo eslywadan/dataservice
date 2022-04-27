@@ -7,7 +7,7 @@ services:
     volumes:
       - D:\DockerRun\dataservice\redis-data:/data
   dataservice-secure:
-    image: dataservice:v1.1
+    image: dataservice:v1-2
     volumes:
       - D:\DockerRun\dataservice:/app/ext
     ports:

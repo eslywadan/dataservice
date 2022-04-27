@@ -28,7 +28,7 @@ def test_edc_data(test_client):
   assert r.status == '200 OK'
 
   named_data = '/ds/eng/edcraw/TFTT6/CVDA0100/items/1GAS1'
-  qstr = '?subEQP=CVDA0100&FromDate=20220401000000,ToDate=20220401000000'
+  qstr = '?subEQP=CVDA0100&FromDate=20220401000000,ToDate=20220402160000'
   url = '%s%s'%(named_data, qstr)
   headers = {'Content-Type': 'application/json', 'apikey': account_token}
   r = test_client.get(url, headers=headers)
