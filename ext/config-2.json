@@ -41,7 +41,7 @@
     },
     "cache":{
         "connection":{
-            "host":"localhost",
+            "host":"dataservice-cache",
             "port":6379
         },
         "type":"AUTO",
@@ -56,7 +56,9 @@
         "mfg_api_server":["http://TNVTMFGRPT01/MFGWebAPI"]
     },
     "int_source_api":{
-        "EDC_RAW":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery2_API.ashx"]
+        "EDC_RAW_TFT":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery_API.ashx"],
+        "EDC_RAW_CF":["/WEB/WAPI/EDC/EDC_CF_EDCQuery_API.ashx"],
+        "EDC_RAW_LCD":["/WEB/WAPI/EDC/EDC_LCD_EDCQuery_API.ashx"]
     },
     "source_api_config":{
         "req_max_retry": "4"

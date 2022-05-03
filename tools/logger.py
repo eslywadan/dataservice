@@ -36,7 +36,7 @@ class Logger:
     @classmethod
     def reset_log_config(clz):
         clz._level = LogLevel.NOTSET
-        clz._folder_path = "logs"
+        clz._folder_path = "ext"
 
 
     #產生logger instance
