@@ -128,14 +128,18 @@ def process_login(**kwargs):
     check_and_log(ignore_token=True)
     
     if "clientId" in request.headers:
-        client_id = request.headers["clientId"]  
+        client_id = request.headers["clientId"] 
+        print(client_id) 
     else:
-        client_id = kwargs['clientId']
+        #client_id = kwargs['clientId']
+        client_id = request.args.get('client')
 
     if "password" in request.headers:
         password = request.headers["password"]
+        print(password)
     else:
-        password = kwargs['password']
+        # password = kwargs['password']
+        password = request.args.get('password')
 
     token = account.check_client_id_password(client_id, password)
 

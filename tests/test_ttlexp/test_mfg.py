@@ -1,5 +1,5 @@
 def test_get_token(test_client):
-  headers = {'clientId': 'waterstat', 'password':'waterstat'}
+  headers = {'clientId': 'mfg', 'password':'mfg'}
   response = test_client.get('/api/Login', headers=headers)
   api_token = response.json
   return api_token 

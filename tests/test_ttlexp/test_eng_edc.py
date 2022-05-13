@@ -1,8 +1,14 @@
 def test_get_token(test_client):
-  headers = {'clientId': 'waterstat', 'password':'waterstat'}
+  headers = {'clientId': 'mfg', 'password':'mfg'}
   response = test_client.get('/api/Login', headers=headers)
   api_token = response.json
   return api_token
+
+def test_get_token_fail(test_client):
+  headers = {'clientId': 'IamWrongClient', 'password':'YouWillNeverPassTokenTest'}
+  response = test_client.get('/api/Login', headers=headers)
+  fail_api_token = response.json
+  print(fail_api_token)
 
 def test_edc_data(test_client):
   account_token = test_get_token(test_client)

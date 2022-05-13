@@ -8,16 +8,17 @@ utility = Blueprint('utility_api', __name__)
 utility_api = Api(utility)
 
 @utility_api.route('/apikey/')
-class HelloWorld(Resource):
+class GetApiKey(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('client', help='Specify your client id')
-    parser.add_argument('passward', help='Specify your client pass')
+    parser.add_argument('password', help='Specify your client pass')
     @utility_api.doc(parser=parser)
     def get(self):
-        args = self.parser.parse_args()
-        client = args['client']
-        passward = args['passward']
-        apikey = req.process_login(clientId=client,password=passward)
+        # args = self.parser.parse_args()
+        # client = args['client']
+        #passward = args['passward']
+        #apikey = req.process_login(clientId=client,password=passward)
+        apikey = req.process_login()
         return apikey
   
 
