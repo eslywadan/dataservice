@@ -24,3 +24,13 @@ def test_products_qtime_recipe_route_get(test_client):
   r = test_client.get(url, headers=headers)
   assert r.status == '200 OK'
 
+def test_wrong_token(test_client):
+  headers = {'clientId': 'eng', 'password':'eng'}
+  response = test_client.get('/api/Login', headers=headers)
+  api_token = response.json
+  prefix_url = '/ds/mfg/recipe/TFT5/products'
+  prod_list = '/TGL320XKHAP,TG5515BF7A,TGL314BH,TGE505XFHSF'
+  headers = {'Content-Type': 'application/json', 'apikey': api_token}
+  url = '%s%s'%(prefix_url, prod_list)
+  r = test_client.get(url, headers=headers)
+  assert r.status == '403 FORBIDDEN'

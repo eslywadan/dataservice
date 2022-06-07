@@ -1,3 +1,4 @@
+from logging.config import valid_ident
 from flask import request, Response, json, render_template
 from flask_restx.utils import not_none
 import ttlsap.fab_proc as fab_proc
@@ -12,6 +13,8 @@ import tools.reset_config as reset_config
 from tools.cache_key import get_cache_key
 import tools.account as account
 from tools.error_handler import JSNError
+from grpc_cust.clientapival_client import get_clientapikey, get_verified_apikey
+
 
 #繼承Response，預設status code:200，預設mimetype:application/json
 class JSNResponse(Response):
@@ -125,28 +128,26 @@ def process_req_ui():
 
 
 def process_login(**kwargs):
-    check_and_log(ignore_token=True)
     
     if "clientId" in request.headers:
         client_id = request.headers["clientId"] 
         print(client_id) 
     else:
-        #client_id = kwargs['clientId']
         client_id = request.args.get('client')
 
     if "password" in request.headers:
         password = request.headers["password"]
-        print(password)
     else:
-        # password = kwargs['password']
         password = request.args.get('password')
 
-    token = account.check_client_id_password(client_id, password)
+    apikey = get_clientapikey(client_id, password)
 
-    if token is not None:
-        return JSNResponse(token)
-    else:
-        return JSNError("Client Id or password is not correct.")
+    if apikey.expiry == "1900-01-01":
+        Logger.log(f"Client id {client_id} fail on verification")
+        return JSNError("Client Id or password is not correct.",status_code=401)
+
+    return JSNResponse(apikey.apikey)
+    
 
 
 
@@ -158,26 +159,43 @@ def check_and_log(ignore_token=False):
         return True
 
     if "apikey" in request.headers: 
-        token = request.headers["apikey"]
+        given_token = request.headers["apikey"]
 
     if request.args.get('token'):
-        token = request.args.get('token')
+        given_token = request.args.get('token')
 
-    if token is not None:
-        redis = RedisDb.default()
-        client_info = redis.get(token)
-    if client_info is not None:
-        client_id = client_info[0:client_info.index(":")]
-        permission = client_info[client_info.index(":")+1:]
-        if permission:
-            permission_list = permission.split("|")
-            if "QUERY" in permission_list:
-                Logger.log(f'Issue request: @{client_id} {request.method} {request.url}')
+    if given_token is not None:
+        token_info =  get_verified_apikey(given_token)
+    if token_info.apikey == given_token:
+        if token_info.assertion is not None:
+            registry = token_info.assertion
+            granted = validate_ds_permission(registry,request.url)
+            Logger.log(f'Issue request: @{given_token} {request.method} {request.url} {token_info.assertion}')
+            if granted == "Permit":
                 return True
+            else:
+                return JSNError("Given token has not the permission for requesting data services",status_code=403)
 
     Logger.log(f'Deny request: {request.method} {request.url}')
-    return False
+    return JSNError("Given token is not correct!",status_code=401)
 
+
+def validate_ds_permission(registry, url):
+
+    nde =url.partition("/ds")[2]
+    permit = []
+    for reg in registry.split(","): 
+        if reg.startswith("-") and nde.startswith(reg.partition("-")[2]):
+            # Negative element, match pattern is not allowed
+            permit.append(False)
+
+        if not reg.startswith("-") and nde.startswith(reg):
+            permit.append(True)
+
+    if permit.__contains__(False) or permit.__len__() == 0:
+        return "No Permit"
+    else:
+        return "Permit"
 
 
 #region 讀寫cache

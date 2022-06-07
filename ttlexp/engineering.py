@@ -41,21 +41,19 @@ class EdcRaw(Resource):
     @eng_api.expect(edc_parser)
     # @eng_api.marshal_with(edcraw_model)
     def get(sellf, fab, equip, items):
-        if not req.check_and_log(ignore_token=False):
-            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+        chk_perm = req.check_and_log(ignore_token=False)
+        if chk_perm is not True:  return chk_perm
+
         start_time = request.args.get('start_time')
         end_time = request.args.get('end_time')
         sub_equip = request.args.get('sub_equip')
-        # grp_id = request.args.get('grp_id')
-        print(start_time,end_time)
 
         data = []
         for item in items.split(","):
             data.append(edcrawapi.edcrawbytime(fab=fab,equip=equip,edc=item,start_time=start_time,
             end_time=end_time,sub_eq=sub_equip,grp_id=''))
-            # print(data)
 
-        return data
+        return req.JSNResponse(data)
 
 
 

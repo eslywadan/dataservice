@@ -34,8 +34,8 @@ class ProdQtime(Resource):
     @mfg_api.expect(mfg_parser)
     # @mfg_api.marshal_with(qtime_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
-        if not req.check_and_log(ignore_token=False):
-            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+        chk_perm = req.check_and_log(ignore_token=False)
+        if chk_perm is not True:  return chk_perm
 
         if list_prods is not None:
             prod_list = list_prods.split(",")
@@ -57,8 +57,8 @@ class PrdRecipe(Resource):
     @mfg_api.expect(mfg_parser)
     # @mfg_api.marshal_with(recipe_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
-        if not req.check_and_log(ignore_token=False):
-            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+        chk_perm = req.check_and_log(ignore_token=False)
+        if chk_perm is not True:  return chk_perm
 
         if list_prods is not None:
             prod_list = list_prods.split(",")
@@ -80,8 +80,8 @@ class PrdRoute(Resource):
     @mfg_api.expect(mfg_parser)
     # @mfg_api.marshal_with(recipe_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
-        if not req.check_and_log(ignore_token=False):
-            return JSNError("Tokenn is missing or token is not correct, please login api to get a new token.",status_code=404)
+        chk_perm = req.check_and_log(ignore_token=False)
+        if chk_perm is not True:  return chk_perm
 
         if list_prods is not None:
             prod_list = list_prods.split(",")

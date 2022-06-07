@@ -1,33 +1,14 @@
-def test_get_token(test_client):
-  headers = {'clientId': 'mfg', 'password':'mfg'}
+def test_get_token(test_client,client_id="eng",password="eng"):
+  headers = {'clientId': client_id, 'password':password}
   response = test_client.get('/api/Login', headers=headers)
   api_token = response.json
   return api_token
 
-def test_get_token_fail(test_client):
-  headers = {'clientId': 'IamWrongClient', 'password':'YouWillNeverPassTokenTest'}
-  response = test_client.get('/api/Login', headers=headers)
-  fail_api_token = response.json
-  print(fail_api_token)
 
-def test_edc_data(test_client):
-  account_token = test_get_token(test_client)
-  named_data = '/ds/eng/edcraw/TFT8/PFRW0100/items/AKCH_EXH_PRES'
-  qstr = '?subEQP=PFRW0100&FromDate=20210114140000,ToDate=20210114160000'
-  url = '%s%s'%(named_data, qstr)
-  headers = {'Content-Type': 'application/json', 'apikey': account_token}
-  r = test_client.get(url, headers=headers)
-  assert r.status == '200 OK'
-
-  named_data = '/ds/eng/edcraw/TFT8/PFRW0100/items/AKCH_EXH_PRES,AKCH_EXH_PRES'
-  qstr = '?subEQP=PFRW0100&FromDate=20210114140000,ToDate=20210114160000'
-  url = '%s%s'%(named_data, qstr)
-  headers = {'Content-Type': 'application/json', 'apikey': account_token}
-  r = test_client.get(url, headers=headers)
-  assert r.status == '200 OK'
-
+def test_edc_data(test_client,client_id="eng",password="eng"):
+  account_token = test_get_token(test_client,client_id, password)
   named_data = '/ds/eng/edcraw/TFT2/CVDA0100/items/E_VALVE_1   E_VALVE_1AVGS'
-  qstr = '?subEQP=CVDA0100&FromDate=20210114140000,ToDate=20220406000000'
+  qstr = '?subEQP=CVDA0100&FromDate=20220114140000,ToDate=20220406000000'
   url = '%s%s'%(named_data, qstr)
   headers = {'Content-Type': 'application/json', 'apikey': account_token}
   r = test_client.get(url, headers=headers)
@@ -55,3 +36,17 @@ def test_edc_data(test_client):
   assert r.status == '200 OK'
 
 
+def test_edc_data_wo_correct_perm(test_client,client_id="mfg",password="mfg"):
+  account_token = test_get_token(test_client,client_id, password)
+  named_data = '/ds/eng/edcraw/TFT2/CVDA0100/items/E_VALVE_1   E_VALVE_1AVGS'
+  qstr = '?subEQP=CVDA0100&FromDate=20220114140000,ToDate=20220406000000'
+  url = '%s%s'%(named_data, qstr)
+  headers = {'Content-Type': 'application/json', 'apikey': account_token}
+  r = test_client.get(url, headers=headers)
+  assert r.status == '403 FORBIDDEN'
+
+
+def test_get_token_fail(test_client):
+  headers = {'clientId': 'IamWrongClient', 'password':'YouWillNeverPassTokenTest'}
+  response = test_client.get('/api/Login', headers=headers)
+  assert response.status == '401 UNAUTHORIZED'
