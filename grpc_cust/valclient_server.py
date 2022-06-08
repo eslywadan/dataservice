@@ -1,7 +1,7 @@
 from concurrent import futures
 from threading import Thread
 from urllib import response
-from tools.account import get_client_info
+from tools.account_2 import get_client_info2
 import grpc
 import grpc_cust.valclient_pb2 as valclient_pb2
 import grpc_cust.valclient_pb2_grpc as valclient_pb2_grpc
@@ -19,7 +19,7 @@ class ValClient(valclient_pb2_grpc.ValclientServicer):
 
     def ElaborDetail(self, request, context):
       print("ElaborDetail called by client(%s)" %(request.client_id))
-      info = get_client_info(request.client_id)
+      info = get_client_info2(request.client_id)
       response = valclient_pb2.Response(
         client_id=request.client_id,
         password = str(info["PASSWORD"][0]),

@@ -12,12 +12,12 @@ def test_clientapival_client():
     token = apikey.apikey
 
     verifiedresult = get_verified_apikey(token)
-    assert verifiedresult.assertion == "/mfg"
+    assert verifiedresult.assertion.split(":")[2] == "/mfg"
 
     apikey = get_clientapikey("eng","eng")
     token = apikey.apikey
     verifiedresult = get_verified_apikey(token)
-    assert verifiedresult.assertion == "/eng"
+    assert verifiedresult.assertion.split(":")[2] == "/eng"
     
 
     

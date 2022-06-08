@@ -3,7 +3,7 @@ import string
 from flask import Blueprint,request
 from flask_restx import Api, Resource, fields, reqparse
 import json
-from tools.error_handler import JSNError
+from tools.response_handler import *
 import tools.request_handler as req 
 from ttlsap.sa_eng import EdcRawApi 
 
@@ -53,7 +53,7 @@ class EdcRaw(Resource):
             data.append(edcrawapi.edcrawbytime(fab=fab,equip=equip,edc=item,start_time=start_time,
             end_time=end_time,sub_eq=sub_equip,grp_id=''))
 
-        return req.JSNResponse(data)
+        return JSNResponse(data)
 
 
 

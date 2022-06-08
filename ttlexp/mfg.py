@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_restx import Api, Resource, fields, reqparse
 import json
-from tools.error_handler import JSNError
+from tools.response_handler import *
 import tools.request_handler as req 
 from ttlsap.sa_mfg import MfgApi 
 
@@ -46,8 +46,7 @@ class ProdQtime(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productqtime(fab,prod))
 
-        # print(data) 
-        return data
+        return JSNResponse(data)
 
 
 @mfg_api.route('/recipe/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdrecipe')
@@ -69,8 +68,7 @@ class PrdRecipe(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productrecipe(fab,prod))
 
-        # print(data) 
-        return data
+        JSNResponse(data)
 
     
 @mfg_api.route('/route/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdroute')
@@ -92,6 +90,5 @@ class PrdRoute(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productroute(fab,prod))
 
-        # print(data) 
-        return data
+        JSNResponse(data)
 

@@ -1,6 +1,5 @@
 from logging.config import valid_ident
-from flask import request, Response, json, render_template
-from flask_restx.utils import not_none
+from flask import request, render_template
 import ttlsap.fab_proc as fab_proc
 import ttlsap.edc_data as edc_data
 import ttlsap.edc_dim as edc_dim
@@ -11,19 +10,76 @@ from tools.redis_db import RedisDb, CacheType
 from tools.logger import Logger
 import tools.reset_config as reset_config
 from tools.cache_key import get_cache_key
-import tools.account as account
-from tools.error_handler import JSNError
+from tools.response_handler import * 
 from grpc_cust.clientapival_client import get_clientapikey, get_verified_apikey
 
 
-#繼承Response，預設status code:200，預設mimetype:application/json
-class JSNResponse(Response):
-    def __init__(self, payload, status_code=200):
-        Response.__init__(self, json.dumps(payload))
-        self.status_code = status_code
-        self.mimetype = 'application/json'
+def process_login(**kwargs):
 
-        Logger.log(f'End request: {status_code}')
+  
+    if "clientId" in request.headers:
+        client_id = request.headers["clientId"]
+    else:
+        client_id = request.args.get('clientId')
+
+    if "password" in request.headers:
+        password = request.headers["password"]
+    else:
+        password = request.args.get('password')
+
+    apikey = get_clientapikey(client_id, password)
+
+    if apikey.expiry == "1900-01-01":
+        Logger.log(f"Client id {client_id} fail on process_login")
+        return JSNError(f"Client Id {client_id} or password {password} is not correct.",status_code=401)
+    
+    Logger.log(f'Issue request: {client_id}, {request.method}, {request.url}')
+    return JSNResponse(apikey.apikey)
+
+
+def check_and_log(ignore_token=False):
+    if ignore_token:
+        Logger.log(f'Issue request: {request.method}, {request.url}')
+        return True
+
+    if "apikey" in request.headers: 
+        given_token = request.headers["apikey"]
+
+    if request.args.get('token'):
+        given_token = request.args.get('token')
+
+    if given_token is not None:
+        token_info =  get_verified_apikey(given_token)
+    if token_info.apikey == given_token:
+        if token_info.assertion is not None:
+            registry = token_info.assertion.split(":")[2]
+            granted = validate_ds_permission(registry,request.url)
+            Logger.log(f'Issue request: @{given_token}, {request.method}, {request.url}, {token_info.assertion}')
+            if granted == "Permit":
+                return True
+            else:
+                return InvalidUsage("Given token has not the permission for requesting data services",status_code=403)
+
+    Logger.log(f'Deny request: {request.method}, {request.url}')
+    return InvalidUsage("Given token is not correct!",status_code=401)
+
+
+def validate_ds_permission(registry, url):
+
+    nde =url.partition("/ds")[2]
+    permit = []
+    for reg in registry.split(","): 
+        if reg.startswith("-") and nde.startswith(reg.partition("-")[2]):
+            # Negative element, match pattern is not allowed
+            permit.append(False)
+
+        if not reg.startswith("-") and nde.startswith(reg):
+            permit.append(True)
+
+    if permit.__contains__(False) or permit.__len__() == 0:
+        return "No Permit"
+    else:
+        return "Permit"
 
 
 #先檢查cache，有則回傳，沒有則建立
@@ -127,75 +183,7 @@ def process_req_ui():
         return render_template('default.html', message='Config refreshed!',  action_url='/home', action_name='Main Menu')
 
 
-def process_login(**kwargs):
-    
-    if "clientId" in request.headers:
-        client_id = request.headers["clientId"] 
-        print(client_id) 
-    else:
-        client_id = request.args.get('client')
 
-    if "password" in request.headers:
-        password = request.headers["password"]
-    else:
-        password = request.args.get('password')
-
-    apikey = get_clientapikey(client_id, password)
-
-    if apikey.expiry == "1900-01-01":
-        Logger.log(f"Client id {client_id} fail on verification")
-        return JSNError("Client Id or password is not correct.",status_code=401)
-
-    return JSNResponse(apikey.apikey)
-    
-
-
-
-#region log request
-
-def check_and_log(ignore_token=False):
-    if ignore_token:
-        Logger.log(f'Issue request: {request.method} {request.url}')
-        return True
-
-    if "apikey" in request.headers: 
-        given_token = request.headers["apikey"]
-
-    if request.args.get('token'):
-        given_token = request.args.get('token')
-
-    if given_token is not None:
-        token_info =  get_verified_apikey(given_token)
-    if token_info.apikey == given_token:
-        if token_info.assertion is not None:
-            registry = token_info.assertion
-            granted = validate_ds_permission(registry,request.url)
-            Logger.log(f'Issue request: @{given_token} {request.method} {request.url} {token_info.assertion}')
-            if granted == "Permit":
-                return True
-            else:
-                return JSNError("Given token has not the permission for requesting data services",status_code=403)
-
-    Logger.log(f'Deny request: {request.method} {request.url}')
-    return JSNError("Given token is not correct!",status_code=401)
-
-
-def validate_ds_permission(registry, url):
-
-    nde =url.partition("/ds")[2]
-    permit = []
-    for reg in registry.split(","): 
-        if reg.startswith("-") and nde.startswith(reg.partition("-")[2]):
-            # Negative element, match pattern is not allowed
-            permit.append(False)
-
-        if not reg.startswith("-") and nde.startswith(reg):
-            permit.append(True)
-
-    if permit.__contains__(False) or permit.__len__() == 0:
-        return "No Permit"
-    else:
-        return "Permit"
 
 
 #region 讀寫cache
@@ -307,3 +295,5 @@ def get_args():
     dict["end"] = end_date.strftime("%Y-%m-%d")
 
     return dict
+
+
