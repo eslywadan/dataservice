@@ -15,10 +15,11 @@ class GetApiKey(Resource):
     parser.add_argument('password', help='Specify your client pass', location='args')
     @utility_api.doc(parser=parser)
     def get(self):
-         args = self.parser.parse_args()
-         client = args['clientId']
-         passward = args['password']
-         apikey = req.process_login(clientId=client,password=passward)
+         # args = self.parser.parse_args()
+         # client = args['clientId']
+         # passward = args['password']
+         # apikey = req.process_login(clientId=client,password=passward)
+         apikey = req.process_login()
          return apikey
   
 
