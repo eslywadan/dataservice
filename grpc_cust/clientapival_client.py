@@ -15,35 +15,41 @@ SERVER_ADDRESS = "%s:%s" %(clientapival_server,clientapival_port)
 
 
 def clientinfo(stub,clientid):
-  print("------------------Enquiry Client Info Begin-----------------")
+  # print("------------------Enquiry Client Info Begin-----------------")
   request = clientapival_pb2.ClientId(clientid=clientid)
-  print("request clientid %s to server(%s)" %(request, SERVER_ADDRESS))
+  # print("request clientid %s to server(%s)" %(request, SERVER_ADDRESS))
+  Logger.log(f"Begin Enquiry Client Info from clientid {clientid}")
   response = stub.clientinfo(request)
-  print("response from server(%s)" %SERVER_ADDRESS)
-  print("response info(%s)" %response)
-  print("-----------------Call  over ------------------")
+  # print("response from server(%s)" %SERVER_ADDRESS)
+  # print("response info(%s)" %response)
+  Logger.log(f"response {response} from server{SERVER_ADDRESS} End")
+  # print("-----------------Call  over ------------------")
   return response
 
 
 def clientapikey(stub,clientid, password):
-  print("------------------Enquiry Client Info Begin-----------------")
+  # print("------------------Enquiry Client Info Begin-----------------")
+  Logger.log(f"Begin Request APIKey from clientid {clientid}")
   request = clientapival_pb2.ClientCred(clientid=clientid, password=password)
-  print("request client api key %s to server(%s)" %(request, SERVER_ADDRESS))
+  # print("request client api key %s to server(%s)" %(request, SERVER_ADDRESS))
   response = stub.clientapikey(request)
-  print("response from server(%s)" %SERVER_ADDRESS)
-  print("response info(%s)" %response)
-  print("-----------------Call  over ------------------")
+  # print("response from server(%s)" %SERVER_ADDRESS)
+  # print("response info(%s)" %response)
+  # print("-----------------Call  over ------------------")
+  Logger.log(f"Response {response} from server {SERVER_ADDRESS} End")
   return response
 
 
 def verifiedapikey(stub,token):
-  print("------------------Verify API Key Begin-----------------")
+  #print("------------------Verify API Key Begin-----------------")
   request = clientapival_pb2.APIKey(apikey=token)
-  print("request verified client api key %s to server(%s)" %(request, SERVER_ADDRESS))
+  # print("request verified client api key %s to server(%s)" %(request, SERVER_ADDRESS))
+  Logger.log(f"Begin verified API Key by token {token}")
   response = stub.verifiedapikey(request)
-  print("response from server(%s)" %SERVER_ADDRESS)
-  print("response info(%s)" %response)
-  print("-----------------Call  over ------------------")
+  # print("response from server(%s)" %SERVER_ADDRESS)
+  # print("response info(%s)" %response)
+  # print("-----------------Call  over ------------------")
+  Logger.log(f"Response {response} from server {SERVER_ADDRESS} End")
   return response
 
 

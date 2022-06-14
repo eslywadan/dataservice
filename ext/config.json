@@ -77,10 +77,14 @@
     },
     "grpc":{
         "valclient":{
-            "server":"tdatastudio.cminl.oa",
-            "port": 11879
+            "server":"localhost",
+            "port": 23334
         },
         "clientapival":{
+            "server":"localhost",
+            "port": 23334
+        },
+        "hybrid":{
             "server":"localhost",
             "port": 23334
         }

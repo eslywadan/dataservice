@@ -16,7 +16,7 @@ from grpc_cust.clientapival_client import get_clientapikey, get_verified_apikey
 
 def process_login(**kwargs):
 
-  
+
     if "clientId" in request.headers:
         client_id = request.headers["clientId"]
     else:

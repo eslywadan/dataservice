@@ -51,6 +51,7 @@ class Logger:
             logger.setLevel(level.value)
 
             filename = os.path.join(*clz._folder_path, f'get-data_{key}.log')
+            clz._filename = filename
             handler = logging.FileHandler(filename)
         
             log_format = '%(asctime)s %(levelname)s: %(message)s'

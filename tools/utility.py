@@ -2,6 +2,7 @@ from flask import Blueprint, send_file
 from flask_restx import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 import tools.request_handler as req
+from tools.response_handler import *
 from pathlib import Path
 
 utility = Blueprint('utility_api', __name__)
@@ -10,16 +11,15 @@ utility_api = Api(utility)
 @utility_api.route('/apikey/')
 class GetApiKey(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('client', help='Specify your client id')
-    parser.add_argument('password', help='Specify your client pass')
+    parser.add_argument('clientId', help='Specify your client id', location='args')
+    parser.add_argument('password', help='Specify your client pass', location='args')
     @utility_api.doc(parser=parser)
     def get(self):
-        # args = self.parser.parse_args()
-        # client = args['client']
-        #passward = args['passward']
-        #apikey = req.process_login(clientId=client,password=passward)
-        apikey = req.process_login()
-        return apikey
+         args = self.parser.parse_args()
+         client = args['clientId']
+         passward = args['password']
+         apikey = req.process_login(clientId=client,password=passward)
+         return apikey
   
 
 @utility_api.route('/upload/')
