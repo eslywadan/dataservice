@@ -13,6 +13,7 @@ def test_products_qtime_recipe_route_get(test_client):
   url = '%s%s'%(prefix_url, prod_list)
   r = test_client.get(url, headers=headers)
   assert r.status == '200 OK'
+  assert r.
 
   prefix_url = '/ds/mfg/recipe/TFT5/products'
   url = '%s%s'%(prefix_url, prod_list)

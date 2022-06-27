@@ -56,6 +56,30 @@ def test_ttlsap_sa_mfg():
     mfg_test_data.mkdir(exist_ok=True)
     productqtime_data_path.write_text(json.dumps(req_data))
 
+
+    req_data = mfgapis.productroute(test_fab,test_product)
+    assert_equal(mfgapis.response.status_code, 200)
+
+    productroute_data_path = mfg_test_data / "source_api_product_route.json"
+    if productroute_data_path.exists():
+        last_file = json.load(productroute_data_path.open())
+        assert_equal(last_file, req_data)
+
+    mfg_test_data.mkdir(exist_ok=True)
+    productroute_data_path.write_text(json.dumps(req_data))
+
+    
+    req_data = mfgapis.productrecipe(test_fab,test_product)
+    assert_equal(mfgapis.response.status_code, 200)
+
+    productrecipe_data_path = mfg_test_data / "source_api_product_recipe.json"
+    if productrecipe_data_path.exists():
+        last_file = json.load(productrecipe_data_path.open())
+        assert_equal(last_file, req_data)
+
+    mfg_test_data.mkdir(exist_ok=True)
+    productrecipe_data_path.write_text(json.dumps(req_data))
+
     
 
 

@@ -68,7 +68,7 @@ class PrdRecipe(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productrecipe(fab,prod))
 
-        JSNResponse(data)
+        return JSNResponse(data)
 
     
 @mfg_api.route('/route/<string:fab>/products/<string:list_prods>', methods=['GET'],endpoint='prdroute')
@@ -90,5 +90,5 @@ class PrdRoute(Resource):
         for prod in prod_list:
             data.append(sa_mfg.productroute(fab,prod))
 
-        JSNResponse(data)
+        return JSNResponse(data)
 
