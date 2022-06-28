@@ -54,7 +54,7 @@
         "int_token_server":["http://INTRPT/web/Verify.svc/API/"],
         "int_api_server":["http://intrpt/web/LinkPortal.ashx","http://lintrpt/web/LinkPortal.ashx"],
         "int_t6_api_server":["http://LINTRPT/web/LinkPortal.ashx"],
-        "mfg_api_server":["http://TNVTMFGRPT01/MFGWebAPI"]
+        "mfg_api_server":["http://zipsum/MFGReport"]
     },
     "int_source_api":{
         "EDC_RAW_TFT":["/WEB/WAPI/EDC/EDC_TFT_EDCQuery_API.ashx"],
@@ -62,9 +62,9 @@
         "EDC_RAW_LCD":["/WEB/WAPI/EDC/EDC_LCD_EDCQuery_API.ashx"]
     },
     "mfg_source_api":{
-        "prod_qtime":["/api/Home/GetProductQtime"],
-        "prod_recipe":["/api/Home/GetProductRecipe"],
-        "prod_route":["/api/Home/GetProductRoute"]
+        "prod_qtime":["/api/DS_Modeling/GetProductQtime"],
+        "prod_recipe":["/api/DS_Modeling/GetProductRecipe"],
+        "prod_route":["/api/DS_Modeling/GetProductRoute"]
     },
     "source_api_config":{
         "req_max_retry": "4"
@@ -78,15 +78,15 @@
     "grpc":{
         "valclient":{
             "server":"localhost",
-            "port": 23334
+            "port": 23335
         },
         "clientapival":{
             "server":"localhost",
-            "port": 23334
+            "port": 23335
         },
         "hybrid":{
             "server":"localhost",
-            "port": 23334
+            "port": 23335
         }
     }
 }   

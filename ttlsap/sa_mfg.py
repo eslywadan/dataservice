@@ -10,24 +10,25 @@ class MfgApi():
     def __init__(self):
         pass
 
-    def web_api(self, url):
-        self.response = requests.get(url)
+    def web_api(self, url, FAB_ID, PROD_ID):
+        payload = {"Shop": FAB_ID, "Prod": PROD_ID}
+        self.response = requests.post(url, data=payload)
         return self.response.json()
 
     @classmethod
-    def url_getproductapi(cls, FAB_ID, PROD_ID, FUNC):
-        url = '%s%s?fac=%s&prod=%s' % (cls.apiserver, cls.mfgapi[FUNC][0], FAB_ID, PROD_ID)
+    def url_getproductapi(cls, FUNC):
+        url = '%s%s' % (cls.apiserver, cls.mfgapi[FUNC][0])
         return url
 
     def productqtime(self, FAB_ID, PROD_ID):
-        url = self.url_getproductapi(FAB_ID, PROD_ID, "prod_qtime")
-        return self.web_api(url)
+        url = self.url_getproductapi("prod_qtime")
+        return self.web_api(url, FAB_ID, PROD_ID)
 
     def productrecipe(self, FAB_ID, PROD_ID):
-        url = self.url_getproductapi(FAB_ID, PROD_ID, "prod_recipe" )
-        return self.web_api(url)
+        url = self.url_getproductapi( "prod_recipe" )
+        return self.web_api(url, FAB_ID, PROD_ID)
 
     def productroute(self, FAB_ID, PROD_ID):
-        url = self.url_getproductapi(FAB_ID, PROD_ID, "prod_route")
-        return self.web_api(url)
+        url = self.url_getproductapi( "prod_route")
+        return self.web_api(url, FAB_ID, PROD_ID)
 
