@@ -1,0 +1,16 @@
+.git
+.idea\
+Dockerfile*
+docker-compose*
+.dockerignore
+.gitignore
+.vscode\
+ext\logs
+ext\*.log
+ext\*.json
+logs\
+src\
+temp\
+venv\
+
+

@@ -1,0 +1,31 @@
+metadata:
+  creationTimestamp: "2022-05-21T01:48:37Z"
+  labels:
+    project: datastudio
+    release: datastudio
+    velero.io/backup-name: ns-datastudio-20220518020921
+    velero.io/restore-name: ns-datastudio-20220518020921-20220521094830
+  name: datastudio
+  resourceVersion: "14508"
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  flexVolume: null
+  hostPath: null
+  mountOptions:
+  - nolock
+  - soft
+  - rw
+  nfs:
+    path: /datastudio
+    readOnly: false
+    server: pahdpfs
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  volumeMode: Filesystem
+status:
+  message: ""
+  phase: Bound
+  reason: ""

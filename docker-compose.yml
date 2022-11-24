@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  dataservice-cache:
+    image: "redis:alpine"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - D:\DockerRun\dataservice\redis-data:/data
+
+  dataservice-secure:
+    image: dataservice:apiportalv001
+    build:
+      context: .
+      dockerfile: .\buildgw\Dockerfile
+    volumes:
+      - D:\DockerRun\dataservice:/app/ext
+    ports:
+      - "80:8020"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dataapi-cache
+
+  dataservice-worker:
+    image: dataservice:workerv001
+    build:
+      context: .
+      dockerfile: .\buildcw\Dockerfile
+    volumes:
+      - D:\DockerRun\dataservice-worker:/app/ext
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dataapi-cache
+
+  dataservice-flower:
+    image: dataservice:flowerv001
+    build:
+      context: .
+      dockerfile: .\buildfl\Dockerfile
+    volumes:
+      - D:\DockerRun\dataservice-flower:/app/ext
+    ports:
+      - "8060:8060"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dataapi-cache
