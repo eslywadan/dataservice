@@ -1,11 +1,11 @@
 import re
 from tools.logger import Logger
 from celery.result import AsyncResult
-from taskman.celeryapp import app
+from taskman.celeryapp import worker
 import time
 
 
-def get_worker_status(app:app,items='all'):
+def get_worker_status(app:worker,items='all'):
 	i = app.control.inspect()
 	if items == 'all' or items == 'availability': availability = i.ping()
 	else: availability = None
@@ -28,7 +28,7 @@ def get_worker_status(app:app,items='all'):
 	return result
 
 
-def assure_task_has_registered_worker(app:app, task):
+def assure_task_has_registered_worker(app:worker, task):
     reg_tasks = get_worker_status(app,items='registered_tasks')['registered_tasks']
     if reg_tasks == None : return {0:f'submit task {task} has not registerd worker'}
     
@@ -39,7 +39,7 @@ def assure_task_has_registered_worker(app:app, task):
     else: return {1:reg_worker}
 
 
-def submit_tasks_start(app:app, task):
+def submit_tasks_start(app:worker, task):
 	broker_url = app._conf['broker_url']
 	result_url = app._conf['result_backend']
 	Logger.log(f'{__name__}: test celery broker_url:{broker_url}')
@@ -55,7 +55,7 @@ def chk_async_tasks(tasks:dict, timeout=10):
     wait = 0
     while st.__len__() < rs.__len__() and wait <=timeout:
         for rid in rs:
-            if AsyncResult(rs[rid], app=app).state == 'SUCCESS':
+            if AsyncResult(rs[rid], app=worker).state == 'SUCCESS':
                 st.update({rid:rs[rid]})
         time.sleep(0.2)
         wait += 0.2
@@ -70,7 +70,7 @@ def chk_async_task(task, timeout=10):
 	wait = 0
 	st = None
 	rs = None
-	while AsyncResult(task, app=app).state != 'SUCCESS' and wait <= timeout:
+	while AsyncResult(task, app=worker).state != 'SUCCESS' and wait <= timeout:
 		time.sleep(1)
 		wait += 1
 	if AsyncResult(task).state == 'SUCCESS': st=task
@@ -83,11 +83,11 @@ def get_async_result(task, timeout=10):
 	wait = 0
 	st = None
 	rs = None
-	asyncres = AsyncResult(task, app=app) 
+	asyncres = AsyncResult(task, app=worker) 
 	while asyncres.state != 'SUCCESS' and wait <= timeout:
 		time.sleep(1)
 		wait += 1
-		asyncres = AsyncResult(task, app=app)
+		asyncres = AsyncResult(task, app=worker)
 
 	if asyncres.state == 'SUCCESS': 
 		st=task

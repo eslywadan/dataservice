@@ -6,19 +6,19 @@ from tools.clientdatastore import ClientDataStore
 from tools.celery_oper import *
 import time
 from tools.logger import Logger
-from taskman.celeryapp import app
+from taskman.celeryapp import worker
 import os
 import json
 
 
-app = app
-@app.task
+worker = worker
+@worker.task
 def add(x, y):
     time.sleep(3)
     print()
     return x + y
 
-@app.task
+@worker.task
 def edcrawbytime(**kwargs):
     edcrawapi = EdcRawApi()
     res = edcrawapi.edcrawbytime(fab=kwargs['fab'],equip=kwargs['equip'],edc=kwargs['edc'],start_time=kwargs['start_time'],
@@ -27,7 +27,7 @@ def edcrawbytime(**kwargs):
     return res
 
 
-@app.task
+@worker.task
 def save_edcrawbytime_cds(taskid, clientid, filename,timeout=30):
     """"The function has a delay work on waiting the completion of input task id
         If the input task is 'SUCCESS', it will proceed to get the result by the taskid and save it to the client's data store
@@ -35,7 +35,7 @@ def save_edcrawbytime_cds(taskid, clientid, filename,timeout=30):
     
     state = chk_async_task(taskid, timeout)
     if state['Success Task'] is not None and taskid in state['Success Task'] : 
-        res = AsyncResult(taskid, app=app)
+        res = AsyncResult(taskid, app=worker)
         data = res.result
         Logger.log(f"branch task to monitor the state of {taskid} requested by client {clientid} has res:")
         Logger.log(data)
@@ -51,7 +51,7 @@ def save_edcrawbytime_cds(taskid, clientid, filename,timeout=30):
     else: return{"time out":f"save result task has time out for {timeout} secs"}
 
 
-@app.task
+@worker.task
 def spcyxbytime(**kwargs):
     spcyx = SpcYxApi(fab=kwargs['fab'], proc_id=kwargs['proc_id'], item=kwargs['item'], prod=kwargs['prod']
             ,recipe=kwargs['recipe'], pproc_id=kwargs['pproc_id'],start_time = kwargs['start_time'],
@@ -66,10 +66,12 @@ def async_add(x, y):
     return receipt.id
     
 def async_edcrawbytime(**kwargs):
+    """"submit task edcrawbytime to worker, if "saved_filename" is in kwargs, it will also save the result in CDS  """
     receipt1 = edcrawbytime.delay(fab=kwargs['fab'],equip=kwargs['equip'],edc=kwargs['edc'],start_time=kwargs['start_time'],
         	end_time=kwargs['end_time'],sub_eq=kwargs['sub_eq'],grp_id='')
-    filename = kwargs['saved_filename']
-    receipt2 = save_edcrawbytime_cds.delay(receipt1.id, kwargs['clientid'], filename)        
+    if 'saved_filename' in kwargs: 
+        filename = kwargs['saved_filename']
+        receipt2 = save_edcrawbytime_cds.delay(receipt1.id, kwargs['clientid'], filename)        
     return receipt1.id
 
 def async_spcyxbytime(**kwargs):

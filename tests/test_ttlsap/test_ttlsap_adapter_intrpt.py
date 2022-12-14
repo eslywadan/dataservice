@@ -75,8 +75,6 @@ def test_ttlsap_adapter_intrpt():
 	assert edcrawapi.linkpageencode == intrpt.linkpageencode
 	assert edcrawapi.filter == intrpt.filter
 	assert edcrawapi.filterencode == intrpt.filterencode
-	#assert edcrawapi.apikey == intrpt.apikey
-	#assert edcrawapi.linkkey == intrpt.linkkey
 	
 	print(f"edcrawapi:{edcrawapi.url}")
 	#assert edcrawapi.url == intrpt.url

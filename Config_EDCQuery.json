@@ -1,0 +1,19 @@
+{
+	"server": "intrpt/net/",
+	"key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnRycHQiLCJhdWQiOiIvIiwianRpIjoiZTNjMDNiYzgtYzM4Yy00OWYzLWI4NTctNDU5ZjA5NmU3NmE4IiwidXNlciI6IkRBVEFfU0VSVklDRVMiLCJ1aWQiOiIxMDEzNjM5OSIsInVpcCI6IiIsInJvbGUiOiJhcGlrZXkiLCJleHAiOjE5ODYxOTU0MzN9.m2gkALLHmR22jOGY10NFKd7DYEo0fzSDyrbLpyAoTyw",
+	"user_name": "PETER.PARKER",
+	"api": "Dynamic/DATAMODEL/ENG.CF.API.EDCQuery",
+	"filename": "EDCQuery",
+	"param": {
+		"fab":"CF_6_EDC",
+		"selQryType":"T",
+		"FromDate":"20221114080000",
+		"ToDate":"20221114090000",
+		"txtIDList":"",
+		"selMainEQP":"CNVR0400",
+		"selSubEQP":"CNVR0411",
+		"selEDCItem":"Glass_ ID",
+		"txtOper":"",
+		"txtProd":""
+	}
+}

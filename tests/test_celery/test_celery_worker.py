@@ -11,7 +11,7 @@ from tools.celery_oper import *
 
 
 def submit_edcraw_task():
-	resp = submit_tasks_start(app, 'taskman.celerytask.edcrawbytime')
+	resp = submit_tasks_start(worker, 'taskman.celerytask.edcrawbytime')
 	if 0 in resp.keys(): return {'Warning':'No available worker!'}
 	ta = TrailArg('edcrawasync1')   # ta stands for 'trail arguments'
 	r = {}
@@ -26,7 +26,7 @@ def submit_edcraw_task():
 	return r
 
 def submit_spcyx_task():
-	resp = submit_tasks_start(app, 'taskman.celerytask.spcyxbytime')
+	resp = submit_tasks_start(worker, 'taskman.celerytask.spcyxbytime')
 	if 0 in resp.keys(): return {'Warning':'No available worker!'}
 	ta = TrailArg('spcyxasync1')   # ta stands for 'trail arguments'
 	return async_spcyxbytime(fab=ta.args['fab'], proc_id=ta.args['proc_id'], item=ta.args['spc_item_id'], prod=ta.args['product']
@@ -36,7 +36,7 @@ def submit_spcyx_task():
 
 
 def submit_add_tasks():
-	resp = submit_tasks_start(app, 'taskman.celerytask.add')
+	resp = submit_tasks_start(worker, 'taskman.celerytask.add')
 	if 0 in resp.keys(): return {'Warning':'No available worker!'} 
 	r = {}
 	for i in range(10):
