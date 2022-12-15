@@ -138,7 +138,7 @@ class EdcRaw(Resource):
     # @eng_api.marshal_with(edcraw_model)
     def get(self, fab, equip, items):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_mfg"]
+        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
 
         client_id = chk_perm["client_id"]
         start_time = request.args.get('start_time')
@@ -237,7 +237,7 @@ class SpcYx(Resource):
     @eng_api.expect(spcyx_parser)
     def get(sellf, fab, proc_id, item, prod, recipe, pproc_id):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_mfg"]
+        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
 
         client_id = chk_perm["client_id"]
         start_time = request.args.get('start_time')

@@ -35,7 +35,7 @@ class ProdQtime(Resource):
     # @mfg_api.marshal_with(qtime_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_mfg"]
+        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
 
         if list_prods is not None:
             prod_list = list_prods.split(",")
@@ -57,7 +57,7 @@ class PrdRecipe(Resource):
     # @mfg_api.marshal_with(recipe_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_mfg"]
+        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
 
         if list_prods is not None:
             prod_list = list_prods.split(",")
@@ -79,7 +79,7 @@ class PrdRoute(Resource):
     # @mfg_api.marshal_with(recipe_model, mask='token')
     def get(self, fab, prod=None, list_prods=None):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_mfg"]
+        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
 
         if list_prods is not None:
             prod_list = list_prods.split(",")
