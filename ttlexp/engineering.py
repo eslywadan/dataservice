@@ -40,7 +40,8 @@ class Edc(Resource):
 
     def get(self, fab, equip, sub_equip, items):
         chk_perm = verified_token(ignore_token=False)
-        if chk_perm["status"] is not True:  return chk_perm["error_msg"]
+        if chk_perm["status"] is not True:
+            return chk_perm["error_msg"]
 
         client_id = chk_perm["client_id"]
         start_time = request.args.get('start_time')
@@ -119,6 +120,93 @@ class Edc(Resource):
                 i += 1
 
         return JSNResponse(receipts)
+
+
+edc_parser = eng_api.parser()
+edc_parser.add_argument('start_time', type=str,  help='Required start time by date,ex:20220114140000')
+edc_parser.add_argument('end_time', type=str, help='Required end time by date,ex:20220114160000')
+edc_parser.add_argument('items', type=str, help='edc item, seperate by "," for multiple items')
+edc_parser.add_argument('token', type=str, help='Optional token')
+@eng_api.route('/edc/edcRawByTime/<string:fab>/<string:equip>/<string:sub_equip>', methods=['GET'])
+class Edc(Resource):
+    @eng_api.doc('EDC NDE')
+    @eng_api.expect(edc_parser)
+
+    def get(self, fab, equip, sub_equip):
+        chk_perm = verified_token(ignore_token=False)
+        if chk_perm["status"] is not True:
+            return chk_perm["error_msg"]
+
+        client_id = chk_perm["client_id"]
+        start_time = request.args.get('start_time')
+        end_time = request.args.get('end_time')
+        items = request.args.get('items')
+
+        Logger.log(f"full_path: {request.full_path}")
+        Logger.log(f"url : {request.url}")
+        Logger.log(f"path: {request.path}")
+        Logger.log(f"query_string: {request.query_string}")
+        saved_filename= f"{request.full_path}.json"
+        return self.wait_online(fab=fab,equip=equip,edc=items,start_time=start_time,
+                end_time=end_time,sub_eq=sub_equip,grp_id='',clientid=client_id, saved_filename=saved_filename)
+        
+    def wait_online(self,**kwargs):
+        # Check the remote worker
+        data = []
+        items = kwargs['edc']
+        #worker_stat = submit_tasks_start(worker,'taskman.celerytask.edcnetbytime')
+        #if 0 in worker_stat: # wait on-line user but cannot find the available remote worker 
+        #Logger.log("Has not the avaialbe remote worker, executed locally")
+        for item in items.split(","):
+                data.append(edcrawapi.edcnetbytime(fab=kwargs["fab"],equip=kwargs["equip"],edc=item,start_time=kwargs["start_time"],
+                end_time=kwargs["end_time"],sub_eq=kwargs["sub_eq"],grp_id='',clientid=kwargs["clientid"]))
+
+        #if 1 in worker_stat: # wait on-line user has available remote worker
+        #    Logger.log("Has the avaialbe remote worker, executed remote")
+        #    receipts = {}
+        #    i = 1
+        #    for item in items.split(","):
+        #        receipt = async_edcrawbytime(fab=kwargs["fab"],equip=kwargs["equip"],edc=item,start_time=kwargs["start_time"],
+        #        end_time=kwargs["end_time"],sub_eq=kwargs["sub_eq"],grp_id='',clientid=kwargs["clientid"])
+        #        receipts[i] = receipt
+        #        i += 1
+
+        #    timeout = receipts.__len__()*10
+        #    async_res = chk_async_tasks(receipts, timeout)
+        #    st = async_res['Success Task']
+        #    Logger.log(st)
+        #    if st.__len__() == receipts.__len__():
+        #        Logger.log("requested items are all completed")
+        #    if st.__len__() > 0 and st.__len__() < receipts.__len__():
+        #        Logger.log("requested items are partially compelted")
+            
+        #    for tid in st:
+        #        data.append(AsyncResult(st[tid], app=worker).result)
+
+        return JSNResponse(data)
+
+    def nowait_async(self,**kwargs):
+        # Check the remote worker
+        data = []
+        items = kwargs['edc']
+        worker_stat = submit_tasks_start(worker,'taskman.celerytask.edcrawbytime')
+        if 0 in worker_stat: # wait on-line user but cannot find the available remote worker
+            m1 =  "Has not the avaialbe remote worker, please use nowait=false"
+            Logger.log(m1)
+            return JSNResponse(m1)
+        if 1 in worker_stat: # wait on-line user has available remote worker
+            Logger.log("Has the avaialbe remote worker, executed remote")
+            receipts = {}
+            i = 1
+            for item in items.split(","):
+                receipt = async_edcrawbytime(fab=kwargs["fab"],equip=kwargs["equip"],edc=item,start_time=kwargs["start_time"],
+                end_time=kwargs["end_time"],sub_eq=kwargs["sub_eq"],grp_id='',clientid=kwargs["clientid"], saved_filename=kwargs["saved_filename"])
+                receipts[i] = receipt
+                i += 1
+
+        return JSNResponse(receipts)
+
+
 
 
 edc_raw_parser = eng_api.parser()

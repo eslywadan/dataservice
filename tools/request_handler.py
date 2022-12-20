@@ -55,10 +55,12 @@ def check_and_log(ignore_token=False):
 
     if given_token is not None:
         token_info =  get_verified_apikey(given_token)
+        if token_info.assertion == 'False':
+            return {"status":1,"error_msg":InvalidUsage('tokern incorrect',payload="Given token is not correct! (無法辨識是哪一個 client id)",status_code=401)}
         client_type = token_info.assertion.split(":")[1]
 
     if client_type == "BLOCK":
-        return {"status":False,"error_msg":InvalidUsage("Given token has found the client is blocked from requesting data services",status_code=401)}
+        return {"status":9,"error_msg":InvalidUsage('blocked',payload="Given token has found the client is blocked from requesting data services",status_code=401)}
 
     if token_info.apikey == given_token:
         if token_info.assertion is not None:
@@ -70,10 +72,10 @@ def check_and_log(ignore_token=False):
                 client_prev = token_info.assertion.split(":")[2]
                 return {"status":True,"apikey":given_token, "client_id":client_id}
             else:
-                return {"status":False,"error_msg":InvalidUsage("Given token has not the permission for requesting data services",status_code=403)}
+                return {"status":2,"error_msg":InvalidUsage('has not the data permission',payload="Given token has not the permission for requesting data services (該 client id 沒有此資料服務的使用權限)",status_code=403)}
 
     Logger.log(f'Deny request: {request.method}, {request.url}')
-    return {"status":False,"error_msg":InvalidUsage("Given token is not correct!",status_code=401)}
+    
 
 
 def validate_ds_permission(registry, url):
