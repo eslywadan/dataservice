@@ -33,7 +33,7 @@ edc_parser.add_argument('end_time', type=str, help='Required end time by date,ex
 #edc_parser.add_argument('nowait', type=str, 
 #    help='Required, If not true, wait on line till the data is responsed. if true, get the order id and retrieve the data by order id latter')
 edc_parser.add_argument('token', type=str, help='Optional token')
-@eng_api.route('/edc/edcRawByTime/<string:fab>/<string:equip>/<string:sub_equip>/items/<string:items>', methods=['GET'])
+# @eng_api.route('/edc/edcRawByTime/<string:fab>/<string:equip>/<string:sub_equip>/items/<string:items>', methods=['GET'])
 class Edc(Resource):
     @eng_api.doc('EDC NDE')
     @eng_api.expect(edc_parser)
