@@ -54,6 +54,7 @@ def check_and_log(ignore_token=False):
         given_token = request.args.get('token')
 
     if given_token is not None:
+        given_token = given_token.strip('"')
         token_info =  get_verified_apikey(given_token)
         if token_info.assertion == 'False':
             return {"status":1,"error_msg":InvalidUsage('tokern incorrect',payload="Given token is not correct! (無法辨識是哪一個 client id)",status_code=401)}
