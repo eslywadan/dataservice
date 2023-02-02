@@ -39,6 +39,9 @@ class IntRptConnect2():
         self.param = fstr_dict
 
     def _whichapiserver(self,fab):
+        """
+            "TFTT6":"TFT_L_EDC","CFT6":"CF_L_EDC","LCDT6":"LCD_L_EDC" will use the different API server
+        """
         self._intapi = self._intapiservers[0]
         if fab.split("_")[1] == "L":
             self._intapi = self._intapiservers[1]
