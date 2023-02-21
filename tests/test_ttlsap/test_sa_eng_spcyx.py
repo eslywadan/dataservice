@@ -2,8 +2,8 @@ from ttlsap.sa_eng_spcyx import SpcYxApi
 
 def test_sa_eng_spcyx():
   nameddata = '/ds/eng/spcyx'
-  start_time = '20220712080000'
-  end_time = '20220712170000' 
+  start_time = '20220802080000'
+  end_time = '20221222170000' 
   run_mode = 'N' 
   owner_code = 'CRN0' 
   peqpt = 'TLCD0300'

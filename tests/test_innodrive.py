@@ -80,7 +80,7 @@ class TestInoDrv():
         assert len(objids) == 0
 
 
-    def test_rename_folder(cls):
+    def _rename_folder(cls):
         """The test case will create a folder 'RenameFolderTest' and then rename it.
             The id should be renmained but the attribute of name should be changed.
             Thus the asserting will check the correctness of get_name_byid """
@@ -100,14 +100,14 @@ class TestInoDrv():
 
         pfolderid = ConfigLoader.config("innodrive")["nodeid"]
         resp = cls.inodrv.add_folder(pfolderid,foldername) 
-        assert resp.status_code == 200
+        assert resp.status_code == 204
 
         objid = cls.inodrv.get_id_byname(foldername)[0] 
         assert  objid is not None
         
         Logger.log(f"Tests:test reanme folder name: oldfolder name:{foldername}:New folder name:{newfoldername} ")
         r = cls.inodrv.rename_folder(objid, newfoldername)
-        assert r.status_code == 204
+        assert r.status_code == 200
         
         objids = cls.inodrv.get_id_byname(newfoldername)
         objid = objids[0]

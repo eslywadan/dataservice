@@ -46,9 +46,9 @@ def test_request_handler_get_spcyx_data():
 
 def test_spcyxapi():
 	spcyx = SpcYxApi(nd='/ds/eng/spcyx',fab='TFT7',proc_id='438N',item='MB_X',prod='TJDF40XK',
-		recipe='DF40XK_A5_4_254A',pproc_id='4300',start_time='20220712080000',end_time='20220712170000',
+		recipe='DF40XK_A5_4_254A',pproc_id='4300',start_time='20220802080000',end_time='20221222170000',
 		run_mode='N', owner_code='CRN0', peqpt='TLCD0300', clientid='eng')
-	assert spcyx.cache_key_text == '/ds/eng/spcyx/T7/438N/MB_X/TJDF40XK/DF40XK_A5_4_254A/4300?start_time=2022-07-12 08:00:00&end_time=2022-07-12 17:00:00&run_mode=N&owner_code=CRN0&peqpt=TLCD0300'
+	assert spcyx.cache_key_text == '/ds/eng/spcyx/T7/438N/MB_X/TJDF40XK/DF40XK_A5_4_254A/4300?start_time=2022-08-02 08:00:00&end_time=2022-12-22 17:00:00&run_mode=N&owner_code=CRN0&peqpt=TLCD0300'
 	spcyx.spcyxbytime()
 	spcyx.save_clientdatastore()
 	spcyx.save_clientdatastore(asciifilename=True)
