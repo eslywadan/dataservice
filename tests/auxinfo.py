@@ -1,32 +1,34 @@
 from model.model import spc_data_info
-
+import json
 
 class SpcYxInfo():
   """ info dict
 	info = {"fab":fab,"chart_list":chart_list,"token":token,"start_dttm":start_dttm,"end_dttm":end_dttm,"method":method,
 	"product":product, "pproc_id":pproc_id,"peqpt_id":peqpt_id,"precipe_id":precipe_id,"owner_code":owner_code,
 	"run_mode":run_mode,"spc_item_id":spc_item_id,"proc_id":proc_id}"""
-  def __init__(self):
-      self.fab = "T7"
-      self.chart_list = ""
-      self.token = ""
-      self.start_dttm = "2022-08-02 08:00:00"
-      self.end_dttm = "2022-12-22 17:00:00"
-      self.method = ""
-      self.product = "TJDF40XK"
-      self.pproc_id="4300"
-      self.peqpt_id="TLCD0300"
-      self.precipe_id = "DF40XK_A5_4_254A"
-      self.owner_code = "CRN0"
-      self.run_mode = "N"
-      self.spc_item_id = "MB_X"
-      self.proc_id = "438N"
-      self.info()
+  def __init__(self,casefile,casename):
+      self.load_cases(casefile, casename)
+
+  def load_cases(self, casefile, casename):
+      with open(casefile) as json_file:
+        spcyx = json.load(json_file)
       
-  def info(self):
-    self._info = spc_data_info(fab=self.fab,chart_list=self.chart_list,token=self.token,start_dttm=self.start_dttm,end_dttm=self.end_dttm,method=self.method,
-	product=self.product, pproc_id=self.pproc_id,peqpt_id=self.peqpt_id,precipe_id=self.precipe_id,owner_code=self.owner_code,
-	run_mode=self.run_mode,spc_item_id=self.spc_item_id,proc_id=self.proc_id)
+      case = spcyx[casename]
+      self._info = spc_data_info(
+        fab = case['fab'],
+        chart_list = case['chart_list'],
+        token = case['token'],
+        start_dttm = case['start_dttm'],
+        end_dttm = case['end_dttm'],
+        method = case['method'],
+        product = case['product'],
+        pproc_id = case['pproc_id'],
+        peqpt_id = case['peqpt_id'],
+        precipe_id = case['precipe_id'],
+        owner_code = case['owner_code'],
+        run_mode = case['run_mode'],
+        spc_item_id = case['spc_item_id'],
+        proc_id = case['proc_id'])
 
 
   
@@ -70,3 +72,9 @@ class TrailArg():
         self.args['proc_id'] = "438N"
         self.args['clientid'] = 'eng'
         self.args['nd'] = 'spcyx'
+
+from datetime import datetime
+
+def casttime1(inputtime:str):
+  datetime_object = datetime.strptime(inputtime, '%Y-%m-%d %H:%M:%S')
+  return datetime_object.strftime("%Y%m%d%H%M%S") 

@@ -1,0 +1,34 @@
+{
+  "spcyx1": {
+    "fab":"F8",
+    "chart_list": "ITCV0122_FKV534B4R2_5220_4PP_Rs",
+    "token": "",
+    "start_dttm": "2023-01-22 02:50:00",
+    "end_dttm": "2023-02-28 07:03:00",
+    "method": "",
+    "product": "FKV534B4R2",
+    "pproc_id": "5200",
+    "peqpt_id": "ITCV0100",
+    "precipe_id": "V534B4R2_ITO",
+    "owner_code": "all",
+    "run_mode": "all",
+    "spc_item_id": "4PP_Rs",
+    "proc_id": "5220"
+  },
+  "spcyx2": {
+    "fab":"F8",
+    "chart_list": "CNVR1109_TKV534X4_G312_PS_Hm",
+    "token": "",
+    "start_dttm": "2022-08-29 00:00:00",
+    "end_dttm": "2022-08-29 13:23:00",
+    "method": "",
+    "product": "TKV534X4",
+    "pproc_id": "G300",
+    "peqpt_id": "CNVR1100",
+    "precipe_id": "all",
+    "owner_code": "all",
+    "run_mode": "N",
+    "spc_item_id": "PS_Hm",
+    "proc_id": "G312"
+  }
+}

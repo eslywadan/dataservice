@@ -1,6 +1,7 @@
 from redis import StrictRedis
 from tools.logger import Logger
 from tools.config_loader import ConfigLoader
+from tools.sec_loader import SecretLoader
 import enum
 import math
 
@@ -16,6 +17,7 @@ class CacheType(enum.IntEnum):
 class RedisDb:
     _host = ''
     _port = 80
+    _password = None
     _cache_type = CacheType.AUTO
     _expiry_hours = 360
 
@@ -23,7 +25,7 @@ class RedisDb:
     @classmethod
     def default(clz):
         clz.check_cache_config()
-        redis_db = clz(clz._host, clz._port)
+        redis_db = clz(clz._host, clz._port, clz._password)
         return redis_db
 
 
@@ -40,6 +42,7 @@ class RedisDb:
             cache_connection = cache_config["connection"]
             clz._host = cache_connection["host"]
             clz._port = int(cache_connection["port"])
+            clz._password = SecretLoader.secret("redis")['pass']
             clz._cache_type = CacheType[cache_config["type"]]
             clz._expiry_hours = float(cache_config["expiry_hours"])
 
@@ -53,8 +56,8 @@ class RedisDb:
 
 
     #產生RedisDb instance
-    def __init__(self, host, port):
-        self.redis = StrictRedis(host=host, port=port, encoding='utf8', decode_responses=True)
+    def __init__(self, host, port, password):
+        self.redis = StrictRedis(host=host, port=port, password=password, encoding='utf8', decode_responses=True)
         # self.redis = StrictRedis(host='10.55.8.21', port='27774', encoding='utf8',password='innodriveredis', decode_responses=True)
         self.logger = Logger.default()
 

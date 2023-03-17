@@ -83,17 +83,20 @@ class SpcYxApi:
 
 		return end_result
 
-	def save_clientdatastore(self, asciifilename=True, h5=True):
+	def save_clientdatastore(self, h5=False):
 		clds = ClientDataStore(clientid=self.client)
-		if asciifilename:
-				filenameb = self.b64csvfilename
-				filename = base64.b64decode(filenameb.split(".")[0][1:])
-				ffilename = filename.decode("ascii")
+		filenameb = self.b64csvfilename
+		filename = base64.b64decode(filenameb.split(".")[0][1:])
+		ffilename = filename.decode("ascii")
 		sourcefilepath = self.csvfilepath
-		sourcefilename = self.b64h5filename
+		sourcefilename = self.b64csvfilename
 		targetsubpath = ffilename.split("?")[0]
-		targetfilename = ffilename.split("?")[1]
+		targetfilename = f"{ffilename.split('?')[1]}.csv"
 		resp = clds.put_file(sfilepath=sourcefilepath, sfilename=sourcefilename,
+									tsubpath= targetsubpath, tfilename= targetfilename)
+		if h5:
+			targetfilename = f"{ffilename.split('?')[1]}.h5"
+			resp = clds.put_file(sfilepath=sourcefilepath, sfilename=sourcefilename,
 									tsubpath= targetsubpath, tfilename= targetfilename)	
 		return resp
 
@@ -103,8 +106,9 @@ class SpcYxApi:
 		return time.strftime(cls._output_time_format,time.strptime(strtime, cls._input_time_format))
 
 	@classmethod
-	def convert_fab_format(cls,fabcode):
+	def convert_fab_format(cls,fabcode, reverse=False):
 		spcyxfabmap = ConfigLoader.config("spcyxfabmap")
+		if reverse: spcyxfabmap = dict([(value, key) for key, value in spcyxfabmap.items()])
 		mfabcode = spcyxfabmap[fabcode]
 		return mfabcode
 
