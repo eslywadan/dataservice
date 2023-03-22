@@ -1,6 +1,5 @@
 from ttlsap.adapter.spcyx2 import SpcYx, get_spcyx_data
 from tests.auxinfo import SpcYxInfo
-import os
 
 def test_SpcYx2():
 
@@ -9,8 +8,7 @@ def test_SpcYx2():
 	"product":product, "pproc_id":pproc_id,"peqpt_id":peqpt_id,"precipe_id":precipe_id,"owner_code":owner_code,
 	"run_mode":run_mode,"spc_item_id":spc_item_id,"proc_id":proc_id}"""
 
-	casefilepath = os.path.join('tests/doc/testcases', 'spcyx-testcases.json')
-	spcyxinfo = SpcYxInfo(casefilepath,'spcyx1')
+	spcyxinfo = SpcYxInfo('spcyx1')
 	spcyx = SpcYx(spcyxinfo._info)
 
 	spcyx.gen_sql_get_spc_data()
@@ -19,7 +17,7 @@ def test_SpcYx2():
 
 	spcyx.get_spc_data()
 	assert spcyx.spc_data is not None
-	spcyxinfo = SpcYxInfo(casefilepath,'spcyx2')
+	spcyxinfo = SpcYxInfo('spcyx2')
 	spcyx2 = SpcYx(spcyxinfo._info)
 	spcyx2.gen_sql_get_spc_data()
 

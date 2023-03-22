@@ -16,8 +16,7 @@ def test_request_handler_get_spcyx_data():
 	"product":product, "pproc_id":pproc_id,"peqpt_id":peqpt_id,"precipe_id":precipe_id,"owner_code":owner_code,
 	"run_mode":run_mode,"spc_item_id":spc_item_id,"proc_id":proc_id}"""
 
-	casefilepath = os.path.join('tests/doc/testcases', 'spcyx-testcases.json')
-	ts = SpcYxInfo(casefilepath,'spcyx1')
+	ts = SpcYxInfo('spcyx1')
 	tc = ts._info
 	tc.start_dttm_c1 = casttime1(tc.start_dttm)
 	tc.end_dttm_c1 = casttime1(tc.end_dttm)
@@ -49,8 +48,7 @@ def test_request_handler_get_spcyx_data():
 	Logger.log(f"result: {dset}")
 
 def on_spcyxapi(testcase):
-	casefilepath = os.path.join('tests/doc/testcases', 'spcyx-testcases.json')
-	ts = SpcYxInfo(casefilepath,testcase)
+	ts = SpcYxInfo(testcase)
 	tc = ts._info
 	tc.start_dttm_c1 = casttime1(tc.start_dttm)
 	tc.end_dttm_c1 = casttime1(tc.end_dttm)

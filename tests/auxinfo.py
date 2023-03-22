@@ -1,25 +1,29 @@
 from model.model import spc_data_info
 import json
+import os
 
 class SpcYxInfo():
   """ info dict
 	info = {"fab":fab,"chart_list":chart_list,"token":token,"start_dttm":start_dttm,"end_dttm":end_dttm,"method":method,
 	"product":product, "pproc_id":pproc_id,"peqpt_id":peqpt_id,"precipe_id":precipe_id,"owner_code":owner_code,
 	"run_mode":run_mode,"spc_item_id":spc_item_id,"proc_id":proc_id}"""
-  def __init__(self,casefile,casename):
-      self.load_cases(casefile, casename)
+  casefile = os.path.join('tests/doc/testcases', 'spcyx-testcases.json')
+  def __init__(self,casename):
+      self.load_cases(casename)
 
-  def load_cases(self, casefile, casename):
-      with open(casefile) as json_file:
+  def load_cases(self, casename):
+      with open(self.casefile) as json_file:
         spcyx = json.load(json_file)
-      
       case = spcyx[casename]
       self._info = spc_data_info(
         fab = case['fab'],
+        fab_pub = case['_fab'],
         chart_list = case['chart_list'],
         token = case['token'],
         start_dttm = case['start_dttm'],
+        start_dttm_c1 = case['_start_dttm'],
         end_dttm = case['end_dttm'],
+        end_dttm_c1 = case['_end_dttm'],
         method = case['method'],
         product = case['product'],
         pproc_id = case['pproc_id'],
@@ -29,6 +33,11 @@ class SpcYxInfo():
         run_mode = case['run_mode'],
         spc_item_id = case['spc_item_id'],
         proc_id = case['proc_id'])
+      self.case_uri()
+
+  def case_uri(self):
+        self.named_data = f"/ds/eng/spcyx/{self._info.fab_pub}/{self._info.proc_id}/{self._info.spc_item_id}/{self._info.product}/{self._info.precipe_id}/{self._info.pproc_id}"
+        self.qstr = f"?start_time={self._info.start_dttm_c1}&end_time={self._info.end_dttm_c1}&run_mode={self._info.run_mode}&owner_code={self._info.owner_code}&peqpt={self._info.peqpt_id}"
 
 
   

@@ -34,16 +34,16 @@ class TestInoDrv():
         assert resp1.json() == resp2.json()
 
     def test_upload_file_same_fname(cls):
-        sfilen = "source_api_edc_raw.json"
-        sfilep = os.path.join("data/eng_test_data",sfilen)
+        sfilen = "spcyx-testcases.json"
+        sfilep = os.path.join("tests\\doc\\testcases",sfilen)
         folderid = ConfigLoader.config("innodrive")["nodeid"]
         resp = cls.inodrv.upload_file(sfilen, sfilep,folderid) 
         assert resp["msg"].status_code == 200
 
     def test_upload_file_diff_fname(cls):
-        sfilen = "AIDeveloper.png"
-        tfilen = "Superman.png"
-        sfilep = os.path.join("data",sfilen)
+        sfilen = "spcyx-testcases.json"
+        tfilen = "testcase.txt"
+        sfilep = os.path.join("tests\\doc\\testcases",sfilen)
         folderid = ConfigLoader.config("innodrive")["nodeid"]
         resp = cls.inodrv.upload_file(sfilen, sfilep,folderid,tfilen) 
         assert resp["msg"].status_code == 200

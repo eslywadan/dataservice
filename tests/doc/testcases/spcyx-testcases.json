@@ -1,10 +1,13 @@
 {
   "spcyx1": {
     "fab":"F8",
+    "_fab":"CF8",
     "chart_list": "ITCV0122_FKV534B4R2_5220_4PP_Rs",
     "token": "",
     "start_dttm": "2023-01-22 02:50:00",
+    "_start_dttm": "20230122025000",
     "end_dttm": "2023-02-28 07:03:00",
+    "_end_dttm": "20230228070300",
     "method": "",
     "product": "FKV534B4R2",
     "pproc_id": "5200",
@@ -17,10 +20,13 @@
   },
   "spcyx2": {
     "fab":"F8",
+    "_fab":"CF8",
     "chart_list": "CNVR1109_TKV534X4_G312_PS_Hm",
     "token": "",
     "start_dttm": "2022-08-29 00:00:00",
+    "_start_dttm": "20220829000000",
     "end_dttm": "2022-08-29 13:23:00",
+    "_end_dttm": "20220829132300",
     "method": "",
     "product": "TKV534X4",
     "pproc_id": "G300",
