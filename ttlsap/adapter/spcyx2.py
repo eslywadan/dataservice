@@ -162,9 +162,9 @@ class SpcYx(SqlBuffer):
         phoenix = dbc.cdp_phoenix()
         self.edc_data_raw = read_query(self._sql_get_edc_data, phoenix)
         phoenix.close()
-        Logger.log(f"{self.__str__}:get_eqpt_list has row counts {self.edc_data_raw.count} ")
+        Logger.log(f"{self.__str__}:get_edc_data has row counts {self.edc_data_raw.count} ")
 
-    def wrangle_edc_data(self,drop_all_na=True,fill_na=True):
+    def wrangle_edc_data(self):
         """More specifically, it will wrangle edc data by
         1. keyword: "drop_all_na" 
            Once the item's data contains all 'None' value, it will be removed by default
@@ -180,55 +180,23 @@ class SpcYx(SqlBuffer):
             4-2 use groupby and agg("min") <or also available by "max"> to merge duplicate rows for columns with string type
             4-3 use concat to combine the data frame obtained by 4-1 & 4-2 and get the final edc_data
         """
-        
-        if drop_all_na: 
-            edc_data_c0 = self.edc_data_raw.dropna(axis=1, how='all')
-            removed_c_set = self.edc_data_raw.columns.difference(edc_data_c0.columns)
-            Logger.log(f"Columns '{removed_c_set}' is checked all na and drop_all_na is {drop_all_na} thus be removed")
-        else: edc_data_c0 = self.edc_data_raw
-        
-        Logger.log(f"{self.__str__}:wrangle_edc_data drop_all_na edc_data_c0")
-
-        if fill_na:
-            self.edc_data_c1 = SpcYx.fillna_edc_data(edc_data_c0)
-            Logger.log(f"{self.__str__}:fillna_edc_data")
-        self._edc_col_type = SpcYx.infer_edc_col_type(self.edc_data_c1, self.edc_rowkey)
-        Logger.log(f"{self.__str__}:infer_edc_col_typ")
+        self.process_na()
+        self.infer_edc_col_type()
         self.set_edc_float_cols()
         self.set_edc_str_cols()
         kwargs = {"grpkey":self.edc_grpkey, "numcols":self._edc_col_type["num"], "strcols":self._edc_col_type["str"]}
-        self.edc_data = SpcYx.merge_edc_data(self.edc_data_c1, kwargs)
-        Logger.log(f"{self.__str__}:wrangle_edc_data merge_edc_data edc_data has row count: {self.edc_data.count} ")
+        self.merge_edc_data(**kwargs)
 
-    def fillna_edc_data(df:pd.DataFrame):
-        edc_data_c2 = df.groupby(SpcYx.edc_grpkey).apply(lambda x: x.ffill().bfill())
-        #edc_data_c2_temp = df.groupby(SpcYx.edc_grpkey).fillna(method='ffill').fillna(method='bfill')
-        #edc_data_c2 = edc_data_c2_temp.fillna(method='ffill').fillna(method='bfill')
-        return edc_data_c2
+    def process_na(self):
+        # self.edc_data_raw.groupby(SpcYx.edc_grpkey).apply(lambda x: x.ffill().bfill())
+        edc_data_bfill = self.edc_data_raw.fillna(method='bfill')
+        self.edc_data_c1 = edc_data_bfill.fillna(method='ffill')
+        Logger.log(f"{self.__str__}:fillna_edc_data")
+        self.edc_data_c1 = self.edc_data_c1.dropna(axis=1, how='all')
+        Logger.log(f"{self.__str__}: drop_all_na")
+        self.edc_data_raw = None
 
-    def infer_edc_col_type(df:pd.DataFrame,rowkey=None):
-        """The returning info has 3 types by dic 
-        1. self._edc_col_type["all"] :all columns
-        2. self._edc_col_type["num"] :numeric type columns
-        3. self._edc_col_type["str"] :string type columns
-        """
-        types = PdExt.coltype(df,rowkey)
-        Logger.log(f"infer_edc_col_type : {types} ")
-        return types
-
-    def set_edc_float_cols(self):
-        if self._edc_col_type is None: self.infer_edc_col_type()
-        # for ncol in self._edc_col_type["num"]:
-        #    self.edc_data_c1[ncol].astype("float")
-        self.edc_data_c1[self._edc_col_type["num"]].applymap(float)
-        Logger.log(f"{self.__str__}:set_edc_float_cols")
- 
-    def set_edc_str_cols(self):
-        if self._edc_col_type is None: self.infer_edc_col_type()
-        self.edc_data_c1[self._edc_col_type["str"]].applymap(str)
-        Logger.log(f"{self.__str__}:set_edc_str_cols")
-
-    def merge_edc_data(df:pd.DataFrame, kwargs):
+    def merge_edc_data(self,**kwargs):
         """
         groupkey: used for groupby
         coltype: 1: num -> numeric types 2: str -> string types
@@ -241,14 +209,35 @@ class SpcYx(SqlBuffer):
         grpkey = kwargs["grpkey"]
         numcols = kwargs["numcols"]
         strcols = kwargs["strcols"]
-        edc_data3 = df.groupby(grpkey)[numcols].agg('mean')
+        edc_data3 = self.edc_data_c1.groupby(grpkey)[numcols].agg('mean')
         Logger.log(f"merge_edc_data:edc_data3")
-        edc_data4 = df.groupby(grpkey)[strcols].agg('min')
+        edc_data4 = self.edc_data_c1.groupby(grpkey)[strcols].agg('min')
         Logger.log(f"merge_edc_data:edc_data4")
         edc_data5 = pd.concat([edc_data3, edc_data4], axis=1)
-        edc_data = edc_data5
+        self.edc_data = edc_data5
         Logger.log(f"merge_edc_data:edc_data5")
-        return edc_data
+        Logger.log(f"{self.__str__}:wrangle_edc_data merge_edc_data edc_data has row count: {self.edc_data.count} ")
+
+    def infer_edc_col_type(self):
+        """The returning info has 3 types by dic 
+        1. self._edc_col_type["all"] :all columns
+        2. self._edc_col_type["num"] :numeric type columns
+        3. self._edc_col_type["str"] :string type columns
+        """
+        self._edc_col_type = PdExt.coltype(self.edc_data_c1,self.edc_rowkey)
+        Logger.log(f"infer_edc_col_type : {self._edc_col_type} ")
+
+    def set_edc_float_cols(self):
+        if self._edc_col_type is None: self.infer_edc_col_type()
+        # for ncol in self._edc_col_type["num"]:
+        #    self.edc_data_c1[ncol].astype("float")
+        self.edc_data_c1[self._edc_col_type["num"]].applymap(float)
+        Logger.log(f"{self.__str__}:set_edc_float_cols")
+ 
+    def set_edc_str_cols(self):
+        if self._edc_col_type is None: self.infer_edc_col_type()
+        self.edc_data_c1[self._edc_col_type["str"]].applymap(str)
+        Logger.log(f"{self.__str__}:set_edc_str_cols")
 
     def merge_spc_edc_data(self):
         """"merget the spc and edc by joining merging keys

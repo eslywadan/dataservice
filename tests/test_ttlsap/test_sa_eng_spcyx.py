@@ -23,5 +23,5 @@ def test_sa_eng_spcyx():
   endresult = spcyx.spcyxbytime()
   assert endresult["status"] == 200
 
-  saveresult = spcyx.save_clientdatastore(asciifilename=True)
+  saveresult = spcyx.save_clientdatastore()
   assert saveresult["status"] == 200

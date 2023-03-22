@@ -19,7 +19,6 @@ def test_SpcYx2():
 
 	spcyx.get_spc_data()
 	assert spcyx.spc_data is not None
-
 	spcyxinfo = SpcYxInfo(casefilepath,'spcyx2')
 	spcyx2 = SpcYx(spcyxinfo._info)
 	spcyx2.gen_sql_get_spc_data()
@@ -39,7 +38,6 @@ def test_SpcYx2():
 	assert spcyx.edc_data_raw is not None
 
 	spcyx.wrangle_edc_data()
-	assert spcyx.edc_data_raw.columns is not None
 	assert spcyx.edc_data_c1.columns is not None
 
 	spcyx.merge_spc_edc_data()
