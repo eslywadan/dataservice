@@ -35,7 +35,7 @@ class TestInoDrv():
 
     def test_upload_file_same_fname(cls):
         sfilen = "spcyx-testcases.json"
-        sfilep = os.path.join("tests\\doc\\testcases",sfilen)
+        sfilep = os.path.join("tests/doc/testcases",sfilen)
         folderid = ConfigLoader.config("innodrive")["nodeid"]
         resp = cls.inodrv.upload_file(sfilen, sfilep,folderid) 
         assert resp["msg"].status_code == 200
@@ -43,7 +43,7 @@ class TestInoDrv():
     def test_upload_file_diff_fname(cls):
         sfilen = "spcyx-testcases.json"
         tfilen = "testcase.txt"
-        sfilep = os.path.join("tests\\doc\\testcases",sfilen)
+        sfilep = os.path.join("tests/doc/testcases",sfilen)
         folderid = ConfigLoader.config("innodrive")["nodeid"]
         resp = cls.inodrv.upload_file(sfilen, sfilep,folderid,tfilen) 
         assert resp["msg"].status_code == 200
